@@ -24,6 +24,9 @@
   background: linear-gradient(135deg, #3c2b2b, #1f0b0b, #000); /* Gradient dark brown-black-red background */
   border-radius: 8px;
   color: #fff;
+  max-height: 100vh;
+
+  overflow-y: scroll;
 }
 
 /* Input Group styles */
