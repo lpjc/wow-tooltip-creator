@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: row;
     margin: 20px 0;
+    align-items: flex-start; /* Align the icon and text at the top */
   }
   
   /* Styles for the large icon on the left */
@@ -44,15 +45,22 @@
     font-family: Arial, sans-serif;
     font-size: 12px;
     position: relative;
+    text-align: left; /* Ensure all text is left-aligned */
+    max-width: 300px; /* Max width of 400px */
+    min-width: 200px; /* Min width of 200px */
+    min-height: 80px; /* Min height of 80px */
+    width: auto; /* Allow flexible width within the max and min constraints */
   }
   
+  /* Tooltip header */
   .preview-tooltip {
-    max-width: 480px;
+    width: 100%;
   }
   
   .preview-tooltip b {
     color: #fff; /* White text for the header */
     font-size: 14px;
+    text-align: left; /* Ensure header is also left-aligned */
   }
   
   .preview-tooltip .q0 {
@@ -94,14 +102,17 @@
   
   .preview-tooltip span {
     line-height: 1.4;
+    text-align: left; /* Ensure all text is left-aligned */
   }
   
   .preview-tooltip table {
     width: 100%;
+    text-align: left; /* Ensure all text in table cells is left-aligned */
   }
   
   .preview-tooltip td {
     vertical-align: top;
+    text-align: left; /* Ensure all table cells' content is left-aligned */
   }
   
   /* Optional styles for the buttons, if needed */
@@ -123,5 +134,6 @@
   .ability-stats td {
     padding-right: 15px;
     color: #ffd100;
+    text-align: left; /* Ensure ability stats are also left-aligned */
   }
   
