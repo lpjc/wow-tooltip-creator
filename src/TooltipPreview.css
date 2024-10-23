@@ -1,0 +1,127 @@
+/* Container for the tooltip preview */
+.tooltip-preview-container {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0;
+  }
+  
+  /* Styles for the large icon on the left */
+  .iconlarge {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    margin-right: 10px;
+  }
+  
+  .iconlarge ins {
+    display: block;
+    width: 56px;
+    height: 56px;
+    background-size: cover;
+    border: 1px solid #000;
+  }
+  
+  .iconlarge del {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 56px;
+    height: 56px;
+  }
+  
+  .iconlarge-backdrop {
+    width: 56px;
+    height: 56px;
+    background: url('https://db.ascension.gg/static/images/icons/icon-frame.png') no-repeat;
+  }
+  
+  /* Styles for the tooltip content */
+  .wowhead-tooltip {
+    background: #000;
+    border: 1px solid #cba;
+    padding: 8px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    position: relative;
+  }
+  
+  .preview-tooltip {
+    max-width: 480px;
+  }
+  
+  .preview-tooltip b {
+    color: #fff; /* White text for the header */
+    font-size: 14px;
+  }
+  
+  .preview-tooltip .q0 {
+    color: #9d9d9d;
+  }
+  
+  .preview-tooltip .q {
+    color: #ffffff;
+  }
+  
+  .preview-tooltip .worldforged-hint {
+    color: #00ccff;
+    font-style: italic;
+  }
+  
+  .preview-tooltip .iconsmall {
+    display: inline-block;
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .preview-tooltip .iconsmall ins {
+    display: block;
+    width: 18px;
+    height: 18px;
+    background-size: cover;
+    margin-right: 2px;
+    border: 1px solid #000;
+  }
+  
+  .preview-tooltip .iconsmall del {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .preview-tooltip span {
+    line-height: 1.4;
+  }
+  
+  .preview-tooltip table {
+    width: 100%;
+  }
+  
+  .preview-tooltip td {
+    vertical-align: top;
+  }
+  
+  /* Optional styles for the buttons, if needed */
+  .tooltip-icons {
+    margin-bottom: 10px;
+  }
+  
+  .tooltip-icons button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  
+  /* Ability stats table */
+  .ability-stats {
+    margin-top: 5px;
+  }
+  
+  .ability-stats td {
+    padding-right: 15px;
+    color: #ffd100;
+  }
+  

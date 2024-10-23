@@ -1,0 +1,59 @@
+/* Layout and background styles */
+.tooltip-designer-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #2b2b2b; /* Dark grey background for the input side */
+}
+
+.input-section {
+  width: 50%;
+  padding: 60px;
+  background-color: #2b2b2b; /* Dark grey background for the input side */
+  border-radius: 8px;
+  color: #fff; /* White text */
+}
+
+.output-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  margin: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #3c2b2b, #1f0b0b, #000); /* Gradient dark brown-black-red background */
+  border-radius: 8px;
+  color: #fff;
+}
+
+/* Input Group styles */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.input-group-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.input-group-row .input-group {
+  width: 48%;
+}

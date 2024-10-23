@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ability",
+  "description": "Schema for a World of Warcraft ability.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the ability."
+    },
+    "description": {
+      "type": "string",
+      "description": "A concise explanation of the ability, including duration, targeting info, effects, or conditions."
+    },
+    "icon": {
+      "type": "string",
+      "description": "The visual representation of the ability."
+    },
+    "castTime": {
+      "description": "Cast time details.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["Instant", "Passive", "Next Melee"],
+          "description": "Predefined cast times."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "Channeled" },
+            "duration": {
+              "type": "string",
+              "description": "Duration of the channeled cast (e.g., '3 sec')."
+            }
+          },
+          "required": ["type", "duration"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "Cast Time" },
+            "seconds": {
+              "type": "number",
+              "description": "Cast time in seconds (e.g., 1.5)."
+            }
+          },
+          "required": ["type", "seconds"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "cost": {
+      "type": "object",
+      "description": "Resource cost of the ability.",
+      "properties": {
+        "resourceType": {
+          "type": "string",
+          "enum": [
+            "Mana",
+            "Energy",
+            "Rage",
+            "Runic Power",
+            "Focus",
+            "Chi",
+            "Holy Power",
+            "Insanity",
+            "Maelstrom",
+            "Fury",
+            "Pain",
+            "None"
+          ],
+          "description": "Type of resource used."
+        },
+        "resourceAmount": {
+          "type": "integer",
+          "description": "Amount of resource required."
+        }
+      },
+      "required": ["resourceType", "resourceAmount"],
+      "additionalProperties": false
+    },
+    "cooldown": {
+      "type": "string",
+      "description": "Cooldown time (e.g., '30 sec cooldown')."
+    },
+    "range": {
+      "type": "string",
+      "description": "Range of the ability (e.g., '30-yard range')."
+    },
+    "talentIndicator": {
+      "type": "boolean",
+      "description": "Indicates if the ability is a talent."
+    },
+    "requirements": {
+      "type": "object",
+      "description": "Usage requirements.",
+      "properties": {
+        "weapon": {
+          "type": "string",
+          "description": "Weapon requirements (e.g., requires a shield or a ranged weapon)."
+        },
+        "stance": {
+          "type": "string",
+          "description": "Stance requirements (e.g., requires Stealth or Bear Form)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "charges": {
+      "type": "integer",
+      "description": "Number of charges the ability has."
+    }
+  },
+  "required": ["name", "description", "icon"],
+  "additionalProperties": false
+}
