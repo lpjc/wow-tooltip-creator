@@ -30,25 +30,21 @@
 }
 
 /* Input Group styles */
-.input-group {
-  margin-bottom: 20px;
-}
-
+/* Ensure all fields maintain consistency */
 .input-group label {
-  display: block;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   font-size: 14px;
   color: #fff;
 }
 
-.input-group input,
-.input-group select {
+.input-group input, .input-group select, .input-group textarea {
   width: 100%;
   padding: 8px;
   font-size: 14px;
   color: #333;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 .input-group-row {
@@ -60,3 +56,13 @@
 .input-group-row .input-group {
   width: 48%;
 }
+
+/* New CSS for Ability/Talent Toggle and Requirements Checkbox */
+.input-group-radio, .input-group-checkbox {
+  margin-bottom: 20px;
+}
+
+.input-group-radio input, .input-group-checkbox input {
+  margin-right: 5px;
+}
+

@@ -36,7 +36,7 @@ function TooltipDesigner() {
 
   // Handle input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     const property = schema.properties[name];
 
     // Handle nested objects (cost, castTime, requirements)
@@ -48,7 +48,7 @@ function TooltipDesigner() {
     } else if (property.type === 'integer') {
       setFormData({ ...formData, [name]: parseInt(value) || '' });
     } else if (property.type === 'boolean') {
-      setFormData({ ...formData, [name]: e.target.checked });
+      setFormData({ ...formData, [name]: checked });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -69,235 +69,181 @@ function TooltipDesigner() {
 
   // Render input fields dynamically based on schema
   const renderInputFields = () => {
-    const smallFields = ['cooldown', 'range', 'charges'];
+    return (
+      <>
+        {/* Always visible fields */}
+        <div className="input-group">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+        </div>
 
-    const fieldElements = Object.keys(schema.properties).map((key) => {
-      if (key === 'icon') {
-        // Icon is handled separately
-        return null;
-      }
+        <IconSelector
+          iconList={iconList}
+          selectedIcon={selectedIcon}
+          setSelectedIcon={setSelectedIcon}
+        />
 
-      const property = schema.properties[key];
-      const label = property.description || key;
+        <div className="input-group">
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleInputChange}
+          />
+        </div>
 
-      if (property.oneOf) {
-        // Handle 'castTime'
-        return (
-          <div className="input-group" key={key}>
-            <label>{label}</label>
+        {/* Cooldown and Cast Time */}
+        <div className="input-group-row">
+          <div className="input-group">
+            <label>Cooldown</label>
+            <input
+              type="text"
+              name="cooldown"
+              value={formData.cooldown || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          {/* Cast Time (oneOf) */}
+          <div className="input-group">
+            <label>Cast Time</label>
             <select
-              name={key}
-              value={formData[key].type || ''}
+              name="castTime"
+              value={formData.castTime.type || ''}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  [key]: { type: e.target.value },
+                  castTime: { type: e.target.value },
                 })
               }
             >
               <option value="">Select Cast Time</option>
-              {property.oneOf.map((option, idx) => {
-                if (option.type === 'string') {
-                  return (
+              {schema.properties.castTime.oneOf &&
+                schema.properties.castTime.oneOf.map((option, idx) => (
+                  option.enum ? (
                     <option key={idx} value={option.enum[0]}>
                       {option.enum[0]}
                     </option>
-                  );
-                } else if (option.properties.type.const) {
-                  return (
-                    <option key={idx} value={option.properties.type.const}>
-                      {option.properties.type.const}
-                    </option>
-                  );
-                } else {
-                  return null;
-                }
-              })}
+                  ) : null
+                ))}
             </select>
-            {/* Additional fields based on selection */}
-            {formData[key].type === 'Channeled' && (
-              <div className="input-group">
-                <label>Duration (sec):</label>
-                <input
-                  type="text"
-                  name={key}
-                  data-subname="duration"
-                  value={formData[key].duration || ''}
-                  onChange={handleInputChange}
-                />
-              </div>
-            )}
-            {formData[key].type === 'Cast Time' && (
-              <div className="input-group">
-                <label>Cast Time (sec):</label>
-                <input
-                  type="number"
-                  name={key}
-                  data-subname="seconds"
-                  value={formData[key].seconds || ''}
-                  onChange={handleInputChange}
-                />
-              </div>
-            )}
           </div>
-        );
-      } else if (property.type === 'object') {
-        // Handle 'cost' and 'requirements'
-        if (key === 'cost') {
-          return (
-            <div className="input-group-row" key={key}>
-              <div className="input-group small">
-                <label>Resource Type</label>
-                <select
-                  name={key}
-                  data-subname="resourceType"
-                  value={formData[key].resourceType || ''}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select Resource Type</option>
-                  {property.properties.resourceType.enum.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="input-group small">
-                <label>Resource Amount</label>
-                <input
-                  type="number"
-                  name={key}
-                  data-subname="resourceAmount"
-                  value={formData[key].resourceAmount || ''}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-          );
-        } else if (key === 'requirements') {
-          return (
-            <div className="input-group" key={key}>
-              <label>{label}</label>
-              <div className="input-group">
-                <label>Weapon</label>
-                <input
-                  type="text"
-                  name={key}
-                  data-subname="weapon"
-                  value={formData[key].weapon || ''}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="input-group">
-                <label>Stance</label>
-                <input
-                  type="text"
-                  name={key}
-                  data-subname="stance"
-                  value={formData[key].stance || ''}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-          );
-        }
-      } else if (property.enum) {
-        // Enum property, render as dropdown
-        return (
-          <div className="input-group" key={key}>
-            <label>{label}</label>
-            <select name={key} value={formData[key]} onChange={handleInputChange}>
-              <option value="">{`Select ${label}`}</option>
-              {property.enum.map((option) => (
+        </div>
+
+        {/* Cost, Charges, and Range */}
+        <div className="input-group-row">
+          <div className="input-group">
+            <label>Resource Type</label>
+            <select
+              name="cost"
+              data-subname="resourceType"
+              value={formData.cost.resourceType || ''}
+              onChange={handleInputChange}
+            >
+              <option value="">Select Resource Type</option>
+              {schema.properties.cost?.properties?.resourceType?.enum?.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
               ))}
             </select>
           </div>
-        );
-      } else if (property.type === 'string') {
-        // String property, render as text input
-        return (
-          <div className="input-group" key={key}>
-            <label>{label}</label>
-            <input
-              type="text"
-              name={key}
-              value={formData[key]}
-              onChange={handleInputChange}
-            />
-          </div>
-        );
-      } else if (property.type === 'integer') {
-        // Integer property, render as number input
-        return (
-          <div className="input-group" key={key}>
-            <label>{label}</label>
+
+          <div className="input-group">
+            <label>Resource Amount</label>
             <input
               type="number"
-              name={key}
-              value={formData[key]}
+              name="cost"
+              data-subname="resourceAmount"
+              value={formData.cost.resourceAmount || ''}
               onChange={handleInputChange}
             />
           </div>
-        );
-      } else if (property.type === 'boolean') {
-        // Boolean property, render as checkbox
-        return (
-          <div className="input-group" key={key}>
-            <label>
+        </div>
+
+        <div className="input-group-row">
+          <div className="input-group">
+            <label>Charges</label>
+            <input
+              type="number"
+              name="charges"
+              value={formData.charges || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="input-group">
+            <label>Range</label>
+            <input
+              type="text"
+              name="range"
+              value={formData.range || ''}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        {/* Talent Indicator */}
+        <div className="input-group">
+          <label>
+            <input
+              type="checkbox"
+              name="talentIndicator"
+              checked={formData.talentIndicator || false}
+              onChange={handleInputChange}
+            />
+            Is this a Talent?
+          </label>
+        </div>
+
+        {/* Requirements checkbox */}
+        <div className="input-group">
+          <label>
+            <input
+              type="checkbox"
+              name="requirementsCheckbox"
+              checked={formData.requirementsCheckbox || false}
+              onChange={(e) =>
+                setFormData({ ...formData, requirementsCheckbox: e.target.checked })
+              }
+            />
+            Is there any requirements?
+          </label>
+        </div>
+
+        {/* Show Stance and Weapon only if requirementsCheckbox is checked */}
+        {formData.requirementsCheckbox && (
+          <div className="input-group">
+            <div className="input-group">
+              <label>Stance</label>
               <input
-                type="checkbox"
-                name={key}
-                checked={formData[key] || false}
+                type="text"
+                name="requirements"
+                data-subname="stance"
+                value={formData.requirements.stance || ''}
                 onChange={handleInputChange}
               />
-              {label}
-            </label>
+            </div>
+
+            <div className="input-group">
+              <label>Weapon</label>
+              <input
+                type="text"
+                name="requirements"
+                data-subname="weapon"
+                value={formData.requirements.weapon || ''}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-        );
-      } else {
-        return null;
-      }
-    });
-
-    // Group small fields into pairs
-    const groupedFields = [];
-    let i = 0;
-    while (i < fieldElements.length) {
-      const key = Object.keys(schema.properties)[i];
-      const element = fieldElements[i];
-
-      if (smallFields.includes(key) && element) {
-        const nextKey = Object.keys(schema.properties)[i + 1];
-        const nextElement = fieldElements[i + 1];
-
-        if (smallFields.includes(nextKey) && nextElement) {
-          groupedFields.push(
-            <div className="input-group-row" key={`group-${i}`}>
-              {element}
-              {nextElement}
-            </div>
-          );
-          i += 2; // Skip the next field as it's already grouped
-        } else {
-          groupedFields.push(
-            <div className="input-group-row" key={`group-${i}`}>
-              {element}
-            </div>
-          );
-          i++;
-        }
-      } else if (element) {
-        groupedFields.push(element);
-        i++;
-      } else {
-        i++;
-      }
-    }
-
-    return groupedFields;
+        )}
+      </>
+    );
   };
 
   return (
@@ -307,13 +253,6 @@ function TooltipDesigner() {
         <h2>Create Tooltip</h2>
 
         {renderInputFields()}
-
-        {/* Icon Selection */}
-        <IconSelector
-          iconList={iconList}
-          selectedIcon={selectedIcon}
-          setSelectedIcon={setSelectedIcon}
-        />
 
         <button
           onClick={handleGenerate}
