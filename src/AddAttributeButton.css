@@ -1,0 +1,35 @@
+/* AddAttributeButton.css */
+.add-attribute-button {
+    position: relative;
+  }
+  
+  .add-attribute-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #5facaa;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+  }
+  
+  .attribute-menu {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background-color: #808080;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .attribute-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  .attribute-option:hover {
+    background-color: #5facaa;
+  }
+  

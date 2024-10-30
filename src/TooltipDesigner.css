@@ -1,68 +1,95 @@
+/* TooltipDesigner.css */
+
 /* Layout and background styles */
 .tooltip-designer-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  background-color: #2b2b2b; /* Dark grey background for the input side */
+  width: 100%;
+  padding: 20px;
+  background-color: #2b2b2b;
 }
 
-.input-section {
-  width: 50%;
-  padding: 60px;
-  background-color: #2b2b2b; /* Dark grey background for the input side */
-  border-radius: 8px;
-  color: #fff; /* White text */
-}
-
-.output-section {
+.main-container {
   display: flex;
+  height: 100%;
   flex-direction: column;
   align-items: center;
-  width: 50%;
-  margin: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #3c2b2b, #1f0b0b, #000); /* Gradient dark brown-black-red background */
-  border-radius: 8px;
-  color: #fff;
-  max-height: 100vh;
-
-  overflow-y: scroll;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
-/* Input Group styles */
-/* Ensure all fields maintain consistency */
-.input-group label {
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: #fff;
-}
-
-.input-group input, .input-group select, .input-group textarea {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
-.input-group-row {
+/* Tooltip Preview Container */
+.tooltip-preview-container {
   display: flex;
-  justify-content: space-between;
+  height: 100%;
+  flex-direction: row;
   margin-bottom: 20px;
+  align-items: flex-start;
+  width: 100%;
 }
 
-.input-group-row .input-group {
-  width: 48%;
+.preview-icon {
+  width: 100px;
+  height: 100px;
+  background-color: #d9d9d9;
+  border-radius: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  overflow: hidden;
 }
 
-/* New CSS for Ability/Talent Toggle and Requirements Checkbox */
-.input-group-radio, .input-group-checkbox {
-  margin-bottom: 20px;
+.preview-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.input-group-radio input, .input-group-checkbox input {
-  margin-right: 5px;
+.placeholder-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 14px;
+  color: #555;
 }
 
+.tooltip-preview-body {
+  flex-grow: 1;
+}
+
+.tooltip-design {
+  background-color: #808080;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.tooltip-name,
+.tooltip-description {
+  margin-bottom: 10px;
+  padding: 5px;
+  background-color: #fff;
+  color: #000;
+  border-radius: 5px;
+}
+
+.tooltip-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.tooltip-description {
+  font-size: 14px;
+}
+
+/* Add Attribute Section */
+.add-attribute-section {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.add-attribute-section .add-attribute-button {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}

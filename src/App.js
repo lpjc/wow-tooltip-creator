@@ -1,13 +1,20 @@
 // App.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import TooltipDesigner from './TooltipDesigner';
-import { FixedSizeGrid as Grid } from 'react-window';
+import TooltipHistoryDrawer from './TooltipHistoryDrawer';
+import FooterMenu from './FooterMenu';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <TooltipDesigner />
+    <div className="app">
+      <div className="app-container">
+        <TooltipDesigner />
+        <TooltipHistoryDrawer />
+      </div>
+      <div className="footer-container">
+        <FooterMenu />
+      </div>
     </div>
   );
 }
