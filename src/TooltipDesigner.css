@@ -110,8 +110,7 @@
 }
 
 .talent-label {
-  background-color: rgba(128, 128, 128, 0.5); /* Transparent grey */
-  color: #fff;
+  color: #747474;
   padding: 5px 10px;
   border-radius: 4px;
 }

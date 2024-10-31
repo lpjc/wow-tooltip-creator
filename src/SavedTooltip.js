@@ -14,6 +14,9 @@ function SavedTooltip({ tooltipData }) {
     ? `/icons/${icon}`
     : 'https://db.ascension.gg/static/images/wow/icons/large/inv_misc_questionmark.jpg';
 
+  // Check if 'Talent' attribute is present
+  const isTalent = attributes.some((attr) => attr.label === 'Talent');
+
   return (
     <div className="saved-tooltip-container">
       {/* Icon Section */}
@@ -27,7 +30,11 @@ function SavedTooltip({ tooltipData }) {
       {/* Tooltip Content */}
       <div className="wowhead-tooltip">
         <div className="tooltip-content">
-          <b className="tooltip-name">{name}</b>
+          <div className="tooltip-header">
+            <b className="tooltip-name">{name}</b>
+            {/* Display 'Talent' label in the top-right corner if present */}
+            {isTalent && <div className="talent-label">Talent</div>}
+          </div>
           {/* Render additional attributes */}
           {attributes
             .filter((attr) => attr.label !== 'Talent')
