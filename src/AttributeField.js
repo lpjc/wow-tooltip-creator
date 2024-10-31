@@ -4,7 +4,8 @@ import './AttributeField.css';
 
 function AttributeField({ attribute, updateAttribute }) {
   const { label } = attribute;
-  const [inputValue, setInputValue] = useState(attribute.value || '');
+  const placeholder = attribute.placeholder || ''; // Use a placeholder if provided
+  const [inputValue, setInputValue] = useState(attribute.value || placeholder);
   const [dropdownValue, setDropdownValue] = useState(attribute.dropdownValue || '');
   const [showDropdown, setShowDropdown] = useState(false);
   const [unit, setUnit] = useState(attribute.unit || '');
@@ -22,9 +23,27 @@ function AttributeField({ attribute, updateAttribute }) {
       case 'Cast Time':
         return ['Cast', 'Channeled', 'Instant'];
       case 'Cost':
-        return ['Astral Power', 'Energy', 'Focus', 'Fury', 'Maelstrom', 'Mana', 'Rage', 'Runes'];
+        return [
+          'Astral Power',
+          'Energy',
+          'Focus',
+          'Fury',
+          'Maelstrom',
+          'Mana',
+          'Rage',
+          'Runes',
+        ];
       case 'Secondary Cost':
-        return ['Arcane Charges', 'Chi', 'Combo Points', 'Essence', 'Holy Power', 'Insanity', 'Runic Power', 'Soul Shards'];
+        return [
+          'Arcane Charges',
+          'Chi',
+          'Combo Points',
+          'Essence',
+          'Holy Power',
+          'Insanity',
+          'Runic Power',
+          'Soul Shards',
+        ];
       default:
         return [];
     }
@@ -53,16 +72,43 @@ function AttributeField({ attribute, updateAttribute }) {
     }
   }, [label]);
 
-  // Synchronize contentEditable with state
-  useEffect(() => {
-    if (inputElementRef.current && inputElementRef.current.innerText !== inputValue) {
-      inputElementRef.current.innerText = inputValue;
-    }
-  }, [inputValue]);
-
   // Handle changes in the contentEditable div
   const handleInputChange = (e) => {
-    setInputValue(e.target.innerText.trim());
+    setInputValue(e.target.innerText);
+  };
+
+  // Clear placeholder on focus
+  const handleInputFocus = () => {
+    setShowDropdown(false);
+    if (inputValue === placeholder) {
+      setInputValue('');
+      // Clear the contentEditable element's content
+      if (inputElementRef.current) {
+        inputElementRef.current.innerText = '';
+      }
+    }
+  };
+
+  // Restore placeholder on blur if input is empty
+  const handleInputBlur = () => {
+    if (inputValue.trim() === '') {
+      setInputValue(placeholder);
+      // Set the contentEditable element's content to placeholder
+      if (inputElementRef.current) {
+        inputElementRef.current.innerText = placeholder;
+      }
+    }
+  };
+
+  // Handle key down events
+  const handleInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      // Remove focus from the input
+      if (inputElementRef.current) {
+        inputElementRef.current.blur();
+      }
+    }
   };
 
   // Handle dropdown selection
@@ -84,7 +130,7 @@ function AttributeField({ attribute, updateAttribute }) {
     const displayValue = buildDisplayValue();
     updateAttribute({
       ...attribute,
-      value: inputValue,
+      value: inputValue === placeholder ? '' : inputValue,
       dropdownValue: option,
       unit,
       suffix,
@@ -92,26 +138,6 @@ function AttributeField({ attribute, updateAttribute }) {
       displayValue,
     });
   };
-
-  // Toggle dropdown visibility
-  const toggleDropdown = (e) => {
-    e.stopPropagation(); // Prevent triggering other click handlers
-    setShowDropdown(!showDropdown);
-  };
-
-  // Close dropdown and exit edit mode when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (inputRef.current && !inputRef.current.contains(event.target)) {
-        setShowDropdown(false);
-        setIsEditing(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   // Build the display value
   const buildDisplayValue = () => {
@@ -124,15 +150,18 @@ function AttributeField({ attribute, updateAttribute }) {
       parts.push(prefix);
     }
 
-    if (inputValue) {
+    if (inputValue && inputValue !== placeholder) {
       parts.push(inputValue);
     }
 
-    if (unit && inputValue) {
+    if (unit && inputValue && inputValue !== placeholder) {
       parts.push(unit);
     }
 
-    if (dropdownValue && !(label === 'Cast Time' && (dropdownValue === 'Cast' || dropdownValue === 'Channeled'))) {
+    if (
+      dropdownValue &&
+      !(label === 'Cast Time' && (dropdownValue === 'Cast' || dropdownValue === 'Channeled'))
+    ) {
       parts.push(dropdownValue);
     }
 
@@ -148,22 +177,47 @@ function AttributeField({ attribute, updateAttribute }) {
     const displayValue = buildDisplayValue();
     updateAttribute({
       ...attribute,
-      value: inputValue,
+      value: inputValue === placeholder ? '' : inputValue,
       dropdownValue,
       unit,
       suffix,
       prefix,
-      displayValue, // Include the display value here
+      displayValue,
     });
   }, [inputValue, dropdownValue, unit, suffix, prefix]);
 
+  // Handle dropdown visibility on hover
+  const handleDropdownMouseEnter = () => {
+    setShowDropdown(true);
+  };
+
+  const handleDropdownMouseLeave = () => {
+    setShowDropdown(false);
+  };
+
+  // Close dropdown and exit edit mode when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setShowDropdown(false);
+        setIsEditing(false);
+        handleInputBlur();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [inputRef]);
+
   return (
     <div
-      className={`attribute-field ${isEditing ? 'editing' : ''}`}
+      className={`attribute-field`}
       onMouseEnter={() => setIsEditing(true)}
       onMouseLeave={() => {
         if (!inputRef.current.contains(document.activeElement)) {
           setIsEditing(false);
+          handleInputBlur();
         }
       }}
       ref={inputRef}
@@ -173,49 +227,63 @@ function AttributeField({ attribute, updateAttribute }) {
         {prefix && <span className="attribute-prefix">{prefix} </span>}
 
         {/* Input Value */}
-        {(isEditing && (label !== 'Cast Time' || dropdownValue !== 'Instant')) ? (
+        {isEditing && (label !== 'Cast Time' || dropdownValue !== 'Instant') ? (
           <span
-            className="attribute-input"
+            className={`attribute-input ${inputValue === placeholder ? 'default-value' : ''}`}
             contentEditable
             suppressContentEditableWarning
             onInput={handleInputChange}
-            onFocus={() => setShowDropdown(false)}
-            ref={inputElementRef} // Attach the ref here
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onKeyDown={handleInputKeyDown}
+            ref={inputElementRef}
           >
-            {inputValue}
+            {inputValue === placeholder ? '' : inputValue}
           </span>
         ) : (
-          inputValue && <span>{inputValue}</span>
+          inputValue && (
+            <span className={`${inputValue === placeholder ? 'default-value' : ''}`}>
+              {inputValue}
+            </span>
+          )
         )}
 
         {/* Unit */}
-        {unit && inputValue && <span className="attribute-unit"> {unit}</span>}
+        {unit && inputValue && inputValue !== placeholder && (
+          <span className="attribute-unit"> {unit}</span>
+        )}
 
         {/* Dropdown Value */}
         {getOptions().length > 0 && (
-          <span
-            className="attribute-dropdown-value"
-            onClick={toggleDropdown}
+          <div
+            className="dropdown-container"
+            onMouseEnter={handleDropdownMouseEnter}
+            onMouseLeave={handleDropdownMouseLeave}
           >
-            {' '}
-            {dropdownValue || 'Select'}
-          </span>
+            <span
+              className={`attribute-dropdown-value ${showDropdown ? 'active' : ''} ${
+                !dropdownValue ? 'default-value' : ''
+              }`}
+            >
+              {' '}
+              {dropdownValue || 'Select'}
+            </span>
+            {/* Dropdown */}
+            {showDropdown && (
+              <ul className="dropdown-menu">
+                {getOptions().map((option, index) => (
+                  <li key={index} onClick={() => handleDropdownSelect(option)}>
+                    {option}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         )}
 
         {/* Suffix */}
         {suffix && <span className="attribute-suffix"> {suffix}</span>}
       </span>
-
-      {/* Dropdown */}
-      {showDropdown && (
-        <ul className="dropdown-menu">
-          {getOptions().map((option, index) => (
-            <li key={index} onClick={() => handleDropdownSelect(option)}>
-              {option}
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 }
