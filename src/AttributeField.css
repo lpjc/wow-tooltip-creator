@@ -1,22 +1,23 @@
 /* AttributeField.css */
 .attribute-field {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-  }
-  
-  .attribute-field label {
-    margin-bottom: 5px;
-    font-size: 14px;
-    color: #fff;
-  }
-  
-  .attribute-field input {
-    width: 100%;
-    padding: 8px;
-    font-size: 14px;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.attribute-label {
+  font-size: 14px;
+  color: #fff; /* White text */
+  margin-right: 5px;
+  width: 100px;
+}
+
+.attribute-field input {
+  flex-grow: 1;
+  padding: 5px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

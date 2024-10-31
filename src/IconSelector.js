@@ -5,6 +5,8 @@ import './IconSelector.css';
 function IconSelector({ onSelect, onClose }) {
   const [iconList, setIconList] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const iconsPerPage = 60;
 
   // Fetch icon list
   useEffect(() => {
@@ -20,9 +22,13 @@ function IconSelector({ onSelect, onClose }) {
     fetchIcons();
   }, []);
 
-  // Filter icons based on search term
+  // Filter and paginate icons based on search term
   const filteredIcons = iconList.filter((iconName) =>
     iconName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const paginatedIcons = filteredIcons.slice(
+    (currentPage - 1) * iconsPerPage,
+    currentPage * iconsPerPage
   );
 
   return (
@@ -39,7 +45,7 @@ function IconSelector({ onSelect, onClose }) {
           <button onClick={onClose}>Close</button>
         </div>
         <div className="icon-grid">
-          {filteredIcons.map((iconName) => (
+          {paginatedIcons.map((iconName) => (
             <div
               key={iconName}
               className="image-wrapper"
@@ -52,6 +58,10 @@ function IconSelector({ onSelect, onClose }) {
               />
             </div>
           ))}
+        </div>
+        <div className="pagination-controls">
+          <button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}>Previous</button>
+          <button onClick={() => setCurrentPage((prev) => prev + 1)}>Next</button>
         </div>
       </div>
     </div>
