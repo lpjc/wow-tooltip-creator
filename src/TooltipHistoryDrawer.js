@@ -1,38 +1,50 @@
 // TooltipHistoryDrawer.js
 import React, { useState } from 'react';
-import TooltipPreview from './TooltipPreview';
+import SavedTooltip from './SavedTooltip';
 import './TooltipHistoryDrawer.css';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-function TooltipHistoryDrawer() {
+function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
   const [isOpen, setIsOpen] = useState(true);
-  const [history, setHistory] = useState([
-    // Example history data
-    {
-      icon: '',
-      name: 'Sample Tooltip 1',
-      description: 'This is a sample description.',
-      attributes: [],
-    },
-    // Add more history items as needed
-  ]);
+
+  const toggleDrawer = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div className={`tooltip-history-drawer ${isOpen ? 'open' : 'closed'}`}>
       <div className="drawer-header">
-        <h2>Tooltip History</h2>
-        <button onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? 'Hide' : 'Show'}
+        {isOpen && <h2>Tooltip History</h2>}
+        <button className="toggle-button" onClick={toggleDrawer}>
+          {isOpen ? <FaChevronLeft /> : <FaChevronRight />}
         </button>
       </div>
-      {isOpen && (
+      {isOpen ? (
         <div className="history-list">
-          {history.map((tooltipData, index) => (
+          {savedTooltips.map((tooltipData, index) => (
             <div key={index} className="history-item">
-              <TooltipPreview tooltipData={tooltipData} />
+              <SavedTooltip tooltipData={tooltipData} />
               <div className="history-item-actions">
-                <button>Edit</button>
-                <button>Share</button>
-                <button>Download</button>
+                <button onClick={() => onEditTooltip(tooltipData)}>Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="collapsed-history-list">
+          {savedTooltips.map((tooltipData, index) => (
+            <div key={index} className="collapsed-history-item">
+              <div className="tooltip-icon-wrapper">
+                <img onClick={() => onEditTooltip(tooltipData)}
+                  src={
+                    tooltipData.icon
+                      ? `/icons/${tooltipData.icon}`
+                      : 'https://db.ascension.gg/static/images/wow/icons/large/inv_misc_questionmark.jpg'
+                  }
+                  alt={tooltipData.name + "Click to Edit"}
+                  title={"Edit " + tooltipData.name}
+                  className="collapsed-icon"
+                />
               </div>
             </div>
           ))}

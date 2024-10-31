@@ -1,23 +1,12 @@
 /* AttributeField.css */
 .attribute-field {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  font-size: 14px;
+  color: #fff;
   margin-bottom: 5px;
-}
-
-.attribute-label {
-  font-size: 14px;
-  color: #fff; /* White text */
-  margin-right: 5px;
-  width: 100px;
-}
-
-.attribute-field input {
-  flex-grow: 1;
   padding: 5px;
-  font-size: 14px;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  cursor: text;
+}
+
+.attribute-field.editing {
+  outline: 1px solid #5facaa;
 }

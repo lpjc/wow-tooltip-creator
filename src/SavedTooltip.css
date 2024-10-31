@@ -1,6 +1,6 @@
-/* TooltipPreview.css */
+/* SavedTooltip.css */
 /* Container for the tooltip preview */
-.tooltip-preview-container {
+.saved-tooltip-container{
   display: flex;
   flex-direction: row;
   margin: 20px 0;
@@ -16,7 +16,7 @@
 }
 
 .icon-image {
-  display: block;
+  display: flex;
   width: 56px;
   height: 56px;
   background-size: cover;

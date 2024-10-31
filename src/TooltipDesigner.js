@@ -1,17 +1,39 @@
 // TooltipDesigner.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import IconSelector from './IconSelector';
 import AddAttributeButton from './AddAttributeButton';
 import AttributeField from './AttributeField';
 import './TooltipDesigner.css';
 
-function TooltipDesigner({ onSave }) {
+function TooltipDesigner({ onSave, initialTooltipData }) {
+  const placeholderName = 'Click to edit name';
+  const placeholderDescription = 'Click to edit description';
+
   const [tooltipData, setTooltipData] = useState({
-    icon: '', // Placeholder icon
-    name: 'Click to edit name',
-    description: 'Click to edit description',
+    icon: '',
+    name: placeholderName,
+    description: placeholderDescription,
     attributes: [],
   });
+
+  useEffect(() => {
+    if (initialTooltipData) {
+      setTooltipData({
+        icon: initialTooltipData.icon || '',
+        name: initialTooltipData.name || placeholderName,
+        description: initialTooltipData.description || placeholderDescription,
+        attributes: initialTooltipData.attributes || [],
+      });
+    } else {
+      setTooltipData({
+        icon: '',
+        name: placeholderName,
+        description: placeholderDescription,
+        attributes: [],
+      });
+    }
+  }, [initialTooltipData]);
+
   const [isIconSelectorOpen, setIsIconSelectorOpen] = useState(false);
 
   // Function to update tooltip data
@@ -28,8 +50,8 @@ function TooltipDesigner({ onSave }) {
   const handleClear = () => {
     setTooltipData({
       icon: '',
-      name: 'Click to edit name',
-      description: 'Click to edit description',
+      name: placeholderName,
+      description: placeholderDescription,
       attributes: [],
     });
   };
@@ -50,7 +72,7 @@ function TooltipDesigner({ onSave }) {
         ...tooltipData,
         attributes: [
           ...tooltipData.attributes,
-          { label: attributeLabel, value: '', type: 'text' },
+          { label: attributeLabel, value: attributeLabel, type: 'text' },
         ],
       });
     }
@@ -63,9 +85,7 @@ function TooltipDesigner({ onSave }) {
         {/* Tooltip Preview */}
         <div className="tooltip-preview-container">
           <div className="left-column">
-            {/* Action Buttons */}
-
-
+            {/* Icon Selector */}
             <div
               className="preview-icon"
               onClick={() => setIsIconSelectorOpen(true)}
@@ -73,7 +93,10 @@ function TooltipDesigner({ onSave }) {
               {tooltipData.icon ? (
                 <img src={`/icons/${tooltipData.icon}`} alt="Icon" />
               ) : (
-                <div className="placeholder-icon">Icon</div>
+                <img
+                  src="https://db.ascension.gg/static/images/wow/icons/large/inv_misc_questionmark.jpg"
+                  alt="Default Icon"
+                />
               )}
             </div>
           </div>
@@ -88,18 +111,23 @@ function TooltipDesigner({ onSave }) {
                     className="tooltip-name"
                     contentEditable
                     suppressContentEditableWarning
-                    onBlur={(e) =>
-                      updateTooltipData('name', e.target.innerText)
-                    }
+                    onFocus={(e) => {
+                      if (tooltipData.name === placeholderName) {
+                        e.target.innerText = '';
+                      }
+                    }}
+                    onBlur={(e) => {
+                      const newValue = e.target.innerText.trim();
+                      updateTooltipData('name', newValue || placeholderName);
+                      if (!newValue) e.target.innerText = placeholderName;
+                    }}
                   >
                     {tooltipData.name}
                   </div>
                   {/* Display Talent attribute on top-right if present */}
                   {tooltipData.attributes.some(
                     (attr) => attr.label === 'Talent'
-                  ) && (
-                    <div className="talent-label">Talent</div>
-                  )}
+                  ) && <div className="talent-label">Talent</div>}
                 </div>
                 {/* Display Attributes */}
                 {tooltipData.attributes
@@ -127,9 +155,19 @@ function TooltipDesigner({ onSave }) {
                   className="tooltip-description"
                   contentEditable
                   suppressContentEditableWarning
-                  onBlur={(e) =>
-                    updateTooltipData('description', e.target.innerText)
-                  }
+                  onFocus={(e) => {
+                    if (tooltipData.description === placeholderDescription) {
+                      e.target.innerText = '';
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const newValue = e.target.innerText.trim();
+                    updateTooltipData(
+                      'description',
+                      newValue || placeholderDescription
+                    );
+                    if (!newValue) e.target.innerText = placeholderDescription;
+                  }}
                 >
                   {tooltipData.description}
                 </div>
@@ -137,14 +175,13 @@ function TooltipDesigner({ onSave }) {
             </div>
           </div>
           <div className="action-buttons">
-              <button onClick={handleSave} className="save-button">
-                Save
-              </button>
-              <button onClick={handleClear} className="clear-button">
-                Clear
-              </button>
-            </div>
-
+            <button onClick={handleSave} className="save-button">
+              Save
+            </button>
+            <button onClick={handleClear} className="clear-button">
+              Clear
+            </button>
+          </div>
         </div>
 
         {/* Add Attribute Buttons */}

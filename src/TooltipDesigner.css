@@ -59,8 +59,8 @@
 .preview-icon {
   width: 64px;
   height: 64px;
-  background-color: #d9d9d9;
-  border-radius: 10px;
+  background-color: #22211f;
+  border-radius: 2px;
   cursor: pointer;
   overflow: hidden;
 }
