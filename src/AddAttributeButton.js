@@ -8,10 +8,10 @@ function AddAttributeButton({ attributes, onToggleAttribute }) {
     'Cooldown',
     'Cast Time',
     'Cost',
+    'Secondary Cost',
     'Range',
     'Requirements',
     'Talent',
-    // Add more attributes as needed
   ];
 
   return (

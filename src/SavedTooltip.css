@@ -37,6 +37,7 @@
   min-width: 200px;
   min-height: 80px;
   width: auto;
+  border-radius: 6px;
 }
 
 .tooltip-content {

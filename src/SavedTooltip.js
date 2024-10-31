@@ -33,7 +33,7 @@ function SavedTooltip({ tooltipData }) {
             .filter((attr) => attr.label !== 'Talent')
             .map((attr, index) => (
               <div key={index} className="tooltip-attribute">
-                {attr.value}
+                {attr.displayValue}
               </div>
             ))}
           <div className="tooltip-description">{description}</div>

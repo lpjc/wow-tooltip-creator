@@ -1,12 +1,67 @@
-/* AttributeField.css */
 .attribute-field {
   font-size: 14px;
   color: #fff;
   margin-bottom: 5px;
   padding: 5px;
-  cursor: text;
+  cursor: default;
+  position: relative; /* Ensure the dropdown is positioned relative to this */
+}
+
+.attribute-field:hover {
+  outline: 1px solid #d46d3e;
 }
 
 .attribute-field.editing {
-  outline: 1px solid #5facaa;
+  outline: 1px solid #d46d3e;
 }
+
+.attribute-input {
+  display: inline-block;
+  min-width: 10px;
+  width: auto;
+  padding: 0 2px;
+}
+
+.attribute-input[contenteditable]:focus {
+  outline: none;
+}
+
+.attribute-dropdown-value {
+  cursor: pointer;
+}
+
+.attribute-dropdown-value:hover {
+  color: #d46d3e;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2b2b2b;
+  border: 1px solid #d46d3e;
+  list-style: none;
+  padding: 5px;
+  margin: 0;
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+  background-color: #d46d3e;
+}
+
+.attribute-content {
+  display: inline;
+}
+
+.attribute-prefix,
+.attribute-suffix,
+.attribute-unit {
+  display: inline;
+}
+
