@@ -1,10 +1,9 @@
-// AttributeField.js
 import React, { useState, useEffect, useRef } from 'react';
 import './AttributeField.css';
 
 function AttributeField({ attribute, updateAttribute }) {
   const { label } = attribute;
-  const placeholder = attribute.placeholder || ''; // Use a placeholder if provided
+  const placeholder = attribute.placeholder || ''; 
   const [inputValue, setInputValue] = useState(attribute.value || placeholder);
   const [dropdownValue, setDropdownValue] = useState(attribute.dropdownValue || '');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -19,7 +18,7 @@ function AttributeField({ attribute, updateAttribute }) {
   const getOptions = () => {
     switch (label) {
       case 'Cooldown':
-        return ['sec', 'min', 'hr'];
+        return ['cooldown', 'recharge'];
       case 'Cast Time':
         return ['Cast', 'Channeled', 'Instant'];
       case 'Cost':
@@ -72,9 +71,37 @@ function AttributeField({ attribute, updateAttribute }) {
     }
   }, [label]);
 
-  // Handle changes in the contentEditable div
+  // Fixed handleInputChange function
   const handleInputChange = (e) => {
-    setInputValue(e.target.innerText);
+    // Get the current cursor position
+    const selection = window.getSelection();
+    const currentPosition = selection.focusOffset;
+    
+    // Update the value normally
+    const newValue = e.target.textContent;
+    setInputValue(newValue);
+    
+    // Restore cursor position on next tick
+    requestAnimationFrame(() => {
+      if (inputElementRef.current) {
+        const range = document.createRange();
+        const sel = window.getSelection();
+        
+        // Make sure we have text nodes to work with
+        if (inputElementRef.current.childNodes.length === 0) {
+          inputElementRef.current.appendChild(document.createTextNode(''));
+        }
+        
+        const textNode = inputElementRef.current.childNodes[0];
+        const newPosition = Math.min(currentPosition, textNode.length);
+        
+        range.setStart(textNode, newPosition);
+        range.setEnd(textNode, newPosition);
+        
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
   };
 
   // Clear placeholder on focus
@@ -82,20 +109,18 @@ function AttributeField({ attribute, updateAttribute }) {
     setShowDropdown(false);
     if (inputValue === placeholder) {
       setInputValue('');
-      // Clear the contentEditable element's content
       if (inputElementRef.current) {
-        inputElementRef.current.innerText = '';
+        inputElementRef.current.textContent = '';
       }
     }
   };
 
   // Restore placeholder on blur if input is empty
   const handleInputBlur = () => {
-    if (inputValue.trim() === '') {
+    if (!inputValue || inputValue.trim() === '') {
       setInputValue(placeholder);
-      // Set the contentEditable element's content to placeholder
       if (inputElementRef.current) {
-        inputElementRef.current.innerText = placeholder;
+        inputElementRef.current.textContent = placeholder;
       }
     }
   };
@@ -104,7 +129,6 @@ function AttributeField({ attribute, updateAttribute }) {
   const handleInputKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      // Remove focus from the input
       if (inputElementRef.current) {
         inputElementRef.current.blur();
       }
@@ -118,12 +142,15 @@ function AttributeField({ attribute, updateAttribute }) {
 
     if (label === 'Cast Time') {
       if (option === 'Instant') {
-        // If "Instant" is selected, clear input value and unit
         setInputValue('');
         setUnit('');
       } else {
         setUnit('sec');
       }
+    }
+
+    if (label === 'Cooldown') {
+      setSuffix(option);
     }
 
     // Update the attribute in the parent component
@@ -133,7 +160,7 @@ function AttributeField({ attribute, updateAttribute }) {
       value: inputValue === placeholder ? '' : inputValue,
       dropdownValue: option,
       unit,
-      suffix,
+      suffix: label === 'Cooldown' ? option : suffix,
       prefix,
       displayValue,
     });
@@ -165,7 +192,7 @@ function AttributeField({ attribute, updateAttribute }) {
       parts.push(dropdownValue);
     }
 
-    if (suffix) {
+    if (suffix && label !== 'Cooldown') {
       parts.push(suffix);
     }
 
@@ -210,6 +237,13 @@ function AttributeField({ attribute, updateAttribute }) {
     };
   }, [inputRef]);
 
+  useEffect(() => {
+    // Set initial content for the contentEditable element
+    if (inputElementRef.current) {
+      inputElementRef.current.textContent = inputValue;
+    }
+  }, [isEditing]);
+
   return (
     <div
       className={`attribute-field`}
@@ -238,7 +272,7 @@ function AttributeField({ attribute, updateAttribute }) {
             onKeyDown={handleInputKeyDown}
             ref={inputElementRef}
           >
-            {inputValue === placeholder ? '' : inputValue}
+            {inputValue}
           </span>
         ) : (
           inputValue && (
