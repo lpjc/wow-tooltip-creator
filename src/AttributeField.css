@@ -1,6 +1,5 @@
 /* AttributeField.css */
 
-/* Apply a gradient background to the entire attribute field */
 .attribute-field {
   font-size: 14px;
   color: #fff;
@@ -10,32 +9,25 @@
   position: relative;
   border-radius: 4px;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
-/* Change background on hover */
-.attribute-field:hover {
-  background: linear-gradient(to right, #333333, #444444);
+.attribute-content {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 4px;
 }
 
-.attribute-field.editing {
-  background: linear-gradient(to right, #333333, #444444);
-}
-
-/* Apply border only to active input fields */
 .attribute-input,
 .attribute-dropdown-value {
   display: inline-block;
   min-width: 10px;
   width: auto;
-  padding: 0 2px;
+  padding: 0 0px;
   box-sizing: border-box;
-  border: 1px solid transparent; /* Transparent border to prevent jumping */
-}
-
-/* Ensure consistent field size */
-.attribute-input,
-.attribute-dropdown-value {
-  line-height: 1.2;
+  white-space: nowrap;
 }
 
 /* Active state styling */
@@ -50,6 +42,11 @@
 }
 
 /* Dropdown styling */
+.dropdown-container {
+  display: inline-flex;
+  position: relative;
+}
+
 .attribute-dropdown-value {
   cursor: pointer;
 }
@@ -59,11 +56,6 @@
 }
 
 /* Dropdown menu */
-.dropdown-container {
-  display: inline-block;
-  position: relative;
-}
-
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -79,20 +71,18 @@
 .dropdown-menu li {
   padding: 5px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .dropdown-menu li:hover {
   background-color: #d46d3e;
 }
 
-.attribute-content {
-  display: inline;
-}
-
 .attribute-prefix,
 .attribute-suffix,
 .attribute-unit {
-  display: inline;
+  display: inline-flex;
+  white-space: nowrap;
 }
 
 /* Default value styling */
