@@ -1,5 +1,3 @@
-/* AttributeField.css */
-
 .attribute-field {
   font-size: 14px;
   color: #fff;
@@ -9,8 +7,6 @@
   position: relative;
   border-radius: 4px;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
 }
 
 .attribute-content {
@@ -20,28 +16,30 @@
   gap: 4px;
 }
 
-.attribute-input,
-.attribute-dropdown-value {
+.tooltip-input {
   display: inline-block;
   min-width: 10px;
-  width: auto;
-  padding: 0 0px;
-  box-sizing: border-box;
+  padding: 0;
+  color: #fff;
   white-space: nowrap;
-}
-
-/* Active state styling */
-.attribute-input[contenteditable]:focus,
-.attribute-dropdown-value.active {
-  border: 1px solid #d46d3e;
-  border-radius: 2px;
-}
-
-.attribute-input[contenteditable]:focus {
   outline: none;
 }
 
-/* Dropdown styling */
+.tooltip-input:empty:before {
+  content: attr(placeholder);
+  color: #747474;
+}
+
+.tooltip-input:focus {
+  outline: none;
+}
+
+/* Default/placeholder text styling */
+.tooltip-input:not(:focus):empty,
+.tooltip-input[data-placeholder] {
+  color: #747474;
+}
+
 .dropdown-container {
   display: inline-flex;
   position: relative;
@@ -55,7 +53,10 @@
   color: #d46d3e;
 }
 
-/* Dropdown menu */
+.attribute-dropdown-value.default-value {
+  color: #747474;
+}
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -83,9 +84,4 @@
 .attribute-unit {
   display: inline-flex;
   white-space: nowrap;
-}
-
-/* Default value styling */
-.default-value {
-  color: grey;
 }
