@@ -1,84 +1,105 @@
-/* TooltipHistoryDrawer.css */
-.tooltip-history-drawer {
-  background-color: #b3b3b3;
-  width: 800px;
-  transition: width 0.3s ease;
-  overflow: hidden;
-}
-
-.tooltip-history-drawer.closed {
-  width: 60px;
-}
-
-.drawer-header {
+/* SavedTooltip.css */
+.saved-tooltip-container {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  margin: 10px 0;
+  align-items: flex-start;
+  font-family: Arial, sans-serif;
   padding: 10px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  width: fit-content;
 }
 
-.drawer-header h2 {
-  flex-grow: 1;
-  color: #fff;
-  margin: 0;
+/* Styles for the large icon on the left */
+.iconlarge {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin-right: 10px;
+  flex-shrink: 0;
 }
 
-.toggle-button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.history-list {
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.history-item {
+.icon-image {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.history-item-actions {
-  display: flex;
-  flex-direction: column;
-  margin-left: 10px;
-}
-
-.history-item-actions button {
-  margin-bottom: 5px;
-  padding: 5px;
-  font-size: 12px;
-  background-color: #5facaa;
-  color: #fff;
-  border: none;
+  width: 56px;
+  height: 56px;
+  background-size: cover;
+  border: 1px solid #000;
   border-radius: 4px;
-  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-.collapsed-history-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.collapsed-history-item {
+/* Styles for the tooltip content */
+.wowhead-tooltip {
+  background: rgba(0, 0, 0, 0.95);
+  border: 2px solid #d4a017;
+  padding: 12px;
+  color: #fff;
+  font-size: 12px;
   position: relative;
+  max-width: 300px;
+  min-width: 250px;
+  width: auto;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.tooltip-content {
+  text-align: left;
+}
+
+.tooltip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
 }
 
-.tooltip-icon-wrapper {
-  position: relative;
+.tooltip-name {
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
-.collapsed-icon {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+.talent-label {
+  color: #747474;
+  font-size: 12px;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
 }
 
-.collapsed-icon:hover {
-  transform: scale(1.1);
+.tooltip-description {
+  margin-top: 10px;
+  color: #ffd100;
+  line-height: 1.5;
+  font-size: 13px;
+}
+
+.tooltip-attributes-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.tooltip-attributes-left,
+.tooltip-attributes-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tooltip-attribute {
+  color: #ffd100;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.tooltip-attribute.right-aligned {
+  text-align: right;
 }

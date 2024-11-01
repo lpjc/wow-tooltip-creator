@@ -1,14 +1,35 @@
-// TooltipHistoryDrawer.js
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import SavedTooltip from './SavedTooltip';
 import './TooltipHistoryDrawer.css';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaEdit, FaDownload } from 'react-icons/fa';
+import html2canvas from 'html2canvas';
 
 function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
   const [isOpen, setIsOpen] = useState(true);
+  const tooltipRefs = useRef({});
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleDownload = async (tooltipData, index) => {
+    const tooltipElement = tooltipRefs.current[index];
+    if (!tooltipElement) return;
+
+    try {
+      const canvas = await html2canvas(tooltipElement, {
+        backgroundColor: null,
+        scale: 2, // Higher quality
+        logging: false,
+      });
+
+      const link = document.createElement('a');
+      link.download = `${tooltipData.name || 'tooltip'}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error) {
+      console.error('Error generating tooltip image:', error);
+    }
   };
 
   return (
@@ -23,9 +44,19 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
         <div className="history-list">
           {savedTooltips.map((tooltipData, index) => (
             <div key={index} className="history-item">
-              <SavedTooltip tooltipData={tooltipData} />
+              <div ref={el => tooltipRefs.current[index] = el}>
+                <SavedTooltip tooltipData={tooltipData} />
+              </div>
               <div className="history-item-actions">
-                <button onClick={() => onEditTooltip(tooltipData)}>Edit</button>
+                <button onClick={() => onEditTooltip(tooltipData)}>
+                  <FaEdit /> Edit
+                </button>
+                <button 
+                  className="download-button"
+                  onClick={() => handleDownload(tooltipData, index)}
+                >
+                  <FaDownload /> Download
+                </button>
               </div>
             </div>
           ))}
@@ -35,14 +66,15 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
           {savedTooltips.map((tooltipData, index) => (
             <div key={index} className="collapsed-history-item">
               <div className="tooltip-icon-wrapper">
-                <img onClick={() => onEditTooltip(tooltipData)}
+                <img
+                  onClick={() => onEditTooltip(tooltipData)}
                   src={
                     tooltipData.icon
                       ? `/icons/${tooltipData.icon}`
                       : 'https://db.ascension.gg/static/images/wow/icons/large/inv_misc_questionmark.jpg'
                   }
-                  alt={tooltipData.name + "Click to Edit"}
-                  title={"Edit " + tooltipData.name}
+                  alt={tooltipData.name}
+                  title={`Edit ${tooltipData.name}`}
                   className="collapsed-icon"
                 />
               </div>

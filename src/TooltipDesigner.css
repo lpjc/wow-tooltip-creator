@@ -160,3 +160,31 @@
 .attribute-toggle-btn:hover {
   opacity: 0.8;
 }
+.tooltip-attributes-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.tooltip-attributes-left,
+.tooltip-attributes-right {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tooltip-attributes-right {
+  text-align: right;
+}
+
+/* Modify the existing .attribute-field class */
+.attribute-field {
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.attribute-field.right-aligned {
+  justify-content: flex-end;
+}
