@@ -3,20 +3,22 @@ import './AttributeField.css';
 
 function AttributeField({ attribute, updateAttribute }) {
   const { label } = attribute;
-  const placeholderText = `Click to edit ${label.toLowerCase()}`;
+  const placeholderText = label;
   
   const [value, setValue] = useState('');
   const [dropdownValue, setDropdownValue] = useState(attribute.dropdownValue || '');
+  const [timeUnit, setTimeUnit] = useState('sec');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showTimeUnitDropdown, setShowTimeUnitDropdown] = useState(false);
   const [unit, setUnit] = useState(attribute.unit || '');
   const [suffix, setSuffix] = useState(attribute.suffix || '');
   const [prefix, setPrefix] = useState(attribute.prefix || '');
 
-  // Set default prefixes, suffixes, and units based on the attribute
   useEffect(() => {
     switch (label) {
       case 'Cooldown':
         setSuffix('cooldown');
+        setUnit('sec');
         break;
       case 'Cast Time':
         setUnit('sec');
@@ -35,7 +37,6 @@ function AttributeField({ attribute, updateAttribute }) {
     }
   }, [label]);
 
-  // Define options based on attribute label
   const getOptions = () => {
     switch (label) {
       case 'Cooldown':
@@ -69,6 +70,8 @@ function AttributeField({ attribute, updateAttribute }) {
     }
   };
 
+  const getTimeUnits = () => ['sec', 'min', 'hr'];
+
   const handleDropdownSelect = (option) => {
     setDropdownValue(option);
     setShowDropdown(false);
@@ -87,19 +90,24 @@ function AttributeField({ attribute, updateAttribute }) {
     }
   };
 
-  // Update parent whenever our values change
+  const handleTimeUnitSelect = (selectedUnit) => {
+    setTimeUnit(selectedUnit);
+    setUnit(selectedUnit);
+    setShowTimeUnitDropdown(false);
+  };
+
   useEffect(() => {
     const displayValue = buildDisplayValue();
     updateAttribute({
       ...attribute,
       value,
       dropdownValue,
-      unit,
+      unit: label === 'Cooldown' ? timeUnit : unit,
       suffix: label === 'Cooldown' ? dropdownValue : suffix,
       prefix,
       displayValue,
     });
-  }, [value, dropdownValue, unit, suffix, prefix]);
+  }, [value, dropdownValue, unit, suffix, prefix, timeUnit]);
 
   const buildDisplayValue = () => {
     if (label === 'Cast Time' && dropdownValue === 'Instant') {
@@ -109,7 +117,9 @@ function AttributeField({ attribute, updateAttribute }) {
     const parts = [];
     if (prefix) parts.push(prefix);
     if (value) parts.push(value);
-    if (unit && value) parts.push(unit);
+    if ((unit || timeUnit) && value) {
+      parts.push(label === 'Cooldown' ? timeUnit : unit);
+    }
     if (dropdownValue && 
         !(label === 'Cast Time' && 
           (dropdownValue === 'Cast' || dropdownValue === 'Channeled'))) {
@@ -125,7 +135,7 @@ function AttributeField({ attribute, updateAttribute }) {
         {prefix && <span className="attribute-prefix">{prefix} </span>}
 
         <div
-          className="tooltip-input"
+          className={`tooltip-input ${!value ? 'placeholder-text' : ''}`}
           contentEditable
           suppressContentEditableWarning
           onFocus={(e) => {
@@ -150,7 +160,30 @@ function AttributeField({ attribute, updateAttribute }) {
           {value || placeholderText}
         </div>
 
-        {unit && value && <span className="attribute-unit"> {unit}</span>}
+        {label === 'Cooldown' ? (
+          <>
+            <div
+              className="dropdown-container"
+              onMouseEnter={() => setShowTimeUnitDropdown(true)}
+              onMouseLeave={() => setShowTimeUnitDropdown(false)}
+            >
+              <span className={`attribute-dropdown-value ${!timeUnit ? 'default-value' : ''}`}>
+                {timeUnit} <span className="dropdown-arrow">▼</span>
+              </span>
+              {showTimeUnitDropdown && (
+                <ul className="dropdown-menu">
+                  {getTimeUnits().map((unit, index) => (
+                    <li key={index} onClick={() => handleTimeUnitSelect(unit)}>
+                      {unit}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
+        ) : (
+          unit && value && <span className="attribute-unit"> {unit}</span>
+        )}
 
         {getOptions().length > 0 && (
           <div
@@ -159,8 +192,7 @@ function AttributeField({ attribute, updateAttribute }) {
             onMouseLeave={() => setShowDropdown(false)}
           >
             <span className={`attribute-dropdown-value ${!dropdownValue ? 'default-value' : ''}`}>
-              {' '}
-              {dropdownValue || 'Select'}
+              {dropdownValue || 'Select'} <span className="dropdown-arrow">▼</span>
             </span>
             {showDropdown && (
               <ul className="dropdown-menu">
@@ -174,7 +206,7 @@ function AttributeField({ attribute, updateAttribute }) {
           </div>
         )}
 
-        {suffix && <span className="attribute-suffix"> {suffix}</span>}
+        {suffix && label !== 'Cooldown' && <span className="attribute-suffix"> {suffix}</span>}
       </span>
     </div>
   );
