@@ -1,12 +1,23 @@
 /* SavedTooltip.css */
-.saved-tooltip-container {
+
+.tooltip-history-drawer{
+background-color: #303030;
+padding-left: 10px;
+}
+.history-item{
   display: flex;
   flex-direction: row;
   margin: 10px 0;
   align-items: flex-start;
   font-family: Arial, sans-serif;
-  padding: 10px;
-  background: #1a1a1a;
+  gap: 10px;
+}
+
+.saved-tooltip-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  font-family: Arial, sans-serif;
   border-radius: 8px;
   width: fit-content;
 }
@@ -33,7 +44,7 @@
 /* Styles for the tooltip content */
 .wowhead-tooltip {
   background: rgba(0, 0, 0, 0.95);
-  border: 2px solid #d4a017;
+  border: 2px solid #aca79b;
   padding: 12px;
   color: #fff;
   font-size: 12px;

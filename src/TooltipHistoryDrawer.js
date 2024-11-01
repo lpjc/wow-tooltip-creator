@@ -19,7 +19,7 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
     try {
       const canvas = await html2canvas(tooltipElement, {
         backgroundColor: null,
-        scale: 2, // Higher quality
+        scale: 2,
         logging: false,
       });
 
@@ -32,6 +32,9 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
     }
   };
 
+  // Reverse the tooltips array to show newest first
+  const reversedTooltips = [...savedTooltips].reverse();
+
   return (
     <div className={`tooltip-history-drawer ${isOpen ? 'open' : 'closed'}`}>
       <div className="drawer-header">
@@ -42,7 +45,7 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
       </div>
       {isOpen ? (
         <div className="history-list">
-          {savedTooltips.map((tooltipData, index) => (
+          {reversedTooltips.map((tooltipData, index) => (
             <div key={index} className="history-item">
               <div ref={el => tooltipRefs.current[index] = el}>
                 <SavedTooltip tooltipData={tooltipData} />
@@ -63,7 +66,7 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
         </div>
       ) : (
         <div className="collapsed-history-list">
-          {savedTooltips.map((tooltipData, index) => (
+          {reversedTooltips.map((tooltipData, index) => (
             <div key={index} className="collapsed-history-item">
               <div className="tooltip-icon-wrapper">
                 <img

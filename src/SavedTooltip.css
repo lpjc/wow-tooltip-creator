@@ -11,7 +11,6 @@
   width: fit-content;
 }
 
-/* Styles for the large icon on the left */
 .iconlarge {
   position: relative;
   width: 56px;
@@ -30,7 +29,6 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
-/* Styles for the tooltip content */
 .wowhead-tooltip {
   background: rgba(0, 0, 0, 0.95);
   border: 2px solid #d4a017;
@@ -94,7 +92,7 @@
 }
 
 .tooltip-attribute {
-  color: #ffd100;
+  color: #ffffff;
   font-size: 12px;
   line-height: 1.4;
   white-space: nowrap;
