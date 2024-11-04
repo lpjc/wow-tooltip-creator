@@ -53,9 +53,8 @@ const AttributeField = ({ attribute, updateAttribute, rightAligned }) => {
       case 'Cast Time':
         return (
           <div className="attribute-field">
-            {attribute.castType === 'Instant' ? (
-              <span className="instant-cast">Instant Cast</span>
-            ) : (
+           
+            {attribute.castType !== 'Instant' && (
               <>
                 <input
                   type="text"
@@ -70,21 +69,25 @@ const AttributeField = ({ attribute, updateAttribute, rightAligned }) => {
                   className="number-input"
                 />
                 <span className="locked-unit">sec</span>
-                <select
-                  value={attribute.castType || 'Cast'}
-                  onChange={(e) => updateAttribute({
-                    ...attribute,
-                    castType: e.target.value,
-                    value: e.target.value === 'Instant' ? '' : attribute.value
-                  })}
-                  className="cast-type-select"
-                >
-                  <option value="Cast">Cast</option>
-                  <option value="Channel">Channel</option>
-                  <option value="Instant">Instant</option>
-                </select>
               </>
             )}
+             <select
+              value={attribute.castType || 'Instant'}
+              onChange={(e) => {
+                const newCastType = e.target.value;
+                updateAttribute({
+                  ...attribute,
+                  castType: newCastType,
+                  // Clear the value if switching to Instant
+                  value: newCastType === 'Instant' ? '' : attribute.value
+                });
+              }}
+              className="cast-type-select"
+            >
+              <option value="Instant">Instant</option>
+              <option value="Cast">Cast</option>
+              <option value="Channel">Channel</option>
+            </select>
           </div>
         );
 

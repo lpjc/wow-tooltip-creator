@@ -35,7 +35,7 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
               type = cooldownParts[2];
               break;
             case 'Cast Time':
-              if (attr.displayValue === 'Instant Cast') {
+              if (attr.displayValue === 'Instant') {
                 castType = 'Instant';
               } else {
                 const castParts = attr.displayValue.split(' ');
@@ -117,7 +117,7 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
           newAttribute = {
             ...newAttribute,
             value: '',
-            castType: 'Cast'
+            castType: 'Instant'
           };
           break;
         case 'Cost':
