@@ -30,7 +30,8 @@ const CurrentTooltip = ({ tooltipData, onEditField, onIconClick }) => {
     onEditField('attributes', updatedAttributes);
   };
 
-  return (
+ 
+return (
     <div className="current-tooltip-container">
       <div className="iconlarge" onClick={onIconClick}>
         <div
@@ -38,7 +39,7 @@ const CurrentTooltip = ({ tooltipData, onEditField, onIconClick }) => {
           style={{ backgroundImage: `url('${tooltipIcon}')`, cursor: 'pointer' }}
         ></div>
       </div>
-
+  
       <div className="wowhead-tooltip">
         <div className="tooltip-content">
           <div className="tooltip-header">
@@ -69,74 +70,76 @@ const CurrentTooltip = ({ tooltipData, onEditField, onIconClick }) => {
               />
             )}
           </div>
-
-          {/* Cost and Range Row */}
-          {(costAttributes.length > 0 || rangeAttribute) && (
-            <div className="tooltip-row">
-              <div className="tooltip-left">
-                {costAttributes.map((attr, index) => (
-                  <AttributeField
-                    key={index}
-                    attribute={attr}
-                    updateAttribute={(updatedAttr) => handleAttributeUpdate(attr, updatedAttr)}
-                  />
-                ))}
-              </div>
-              {rangeAttribute && (
-                <div className="tooltip-right">
-                  <AttributeField
-                    attribute={rangeAttribute}
-                    updateAttribute={(updatedAttr) => handleAttributeUpdate(rangeAttribute, updatedAttr)}
-                    rightAligned
-                  />
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Cast Time and Cooldown Row */}
-          {(castTimeAttribute || cooldownAttribute) && (
-            <div className="tooltip-row">
-              {castTimeAttribute && (
+  
+          <div className="tooltip-attributes-wrapper">
+            {/* Cost and Range Row */}
+            {(costAttributes.length > 0 || rangeAttribute) && (
+              <div className="tooltip-row">
                 <div className="tooltip-left">
-                  <AttributeField
-                    attribute={castTimeAttribute}
-                    updateAttribute={(updatedAttr) => handleAttributeUpdate(castTimeAttribute, updatedAttr)}
-                  />
+                  {costAttributes.map((attr, index) => (
+                    <AttributeField
+                      key={index}
+                      attribute={attr}
+                      updateAttribute={(updatedAttr) => handleAttributeUpdate(attr, updatedAttr)}
+                    />
+                  ))}
                 </div>
-              )}
-              {cooldownAttribute && (
-                <div className="tooltip-right">
-                  <AttributeField
-                    attribute={cooldownAttribute}
-                    updateAttribute={(updatedAttr) => handleAttributeUpdate(cooldownAttribute, updatedAttr)}
-                    rightAligned
-                  />
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Charges */}
-          {chargesAttribute && (
-            <div className="tooltip-row">
-              <AttributeField
-                attribute={chargesAttribute}
-                updateAttribute={(updatedAttr) => handleAttributeUpdate(chargesAttribute, updatedAttr)}
-              />
-            </div>
-          )}
-
-          {/* Requirements */}
-          {requirementsAttribute && (
-            <div className="tooltip-row">
-              <AttributeField
-                attribute={requirementsAttribute}
-                updateAttribute={(updatedAttr) => handleAttributeUpdate(requirementsAttribute, updatedAttr)}
-              />
-            </div>
-          )}
-
+                {rangeAttribute && (
+                  <div className="tooltip-right">
+                    <AttributeField
+                      attribute={rangeAttribute}
+                      updateAttribute={(updatedAttr) => handleAttributeUpdate(rangeAttribute, updatedAttr)}
+                      rightAligned
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+  
+            {/* Cast Time and Cooldown Row */}
+            {(castTimeAttribute || cooldownAttribute) && (
+              <div className="tooltip-row">
+                {castTimeAttribute && (
+                  <div className="tooltip-left">
+                    <AttributeField
+                      attribute={castTimeAttribute}
+                      updateAttribute={(updatedAttr) => handleAttributeUpdate(castTimeAttribute, updatedAttr)}
+                    />
+                  </div>
+                )}
+                {cooldownAttribute && (
+                  <div className="tooltip-right">
+                    <AttributeField
+                      attribute={cooldownAttribute}
+                      updateAttribute={(updatedAttr) => handleAttributeUpdate(cooldownAttribute, updatedAttr)}
+                      rightAligned
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+  
+            {/* Charges */}
+            {chargesAttribute && (
+              <div className="tooltip-row">
+                <AttributeField
+                  attribute={chargesAttribute}
+                  updateAttribute={(updatedAttr) => handleAttributeUpdate(chargesAttribute, updatedAttr)}
+                />
+              </div>
+            )}
+  
+            {/* Requirements */}
+            {requirementsAttribute && (
+              <div className="tooltip-row">
+                <AttributeField
+                  attribute={requirementsAttribute}
+                  updateAttribute={(updatedAttr) => handleAttributeUpdate(requirementsAttribute, updatedAttr)}
+                />
+              </div>
+            )}
+          </div>
+  
           <div 
             className="tooltip-description"
             contentEditable

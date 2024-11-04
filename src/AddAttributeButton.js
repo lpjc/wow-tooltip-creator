@@ -12,6 +12,7 @@ function AddAttributeButton({ attributes, onToggleAttribute }) {
     'Range',
     'Requirements',
     'Talent',
+    'Charges',
   ];
 
   return (

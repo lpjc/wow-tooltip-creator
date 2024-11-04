@@ -182,7 +182,7 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
             break;
           case 'Cast Time':
             displayValue = attr.castType === 'Instant' 
-              ? 'Instant Cast'
+              ? 'Instant'
               : `${attr.value} sec ${attr.castType}`;
             break;
           case 'Cost':

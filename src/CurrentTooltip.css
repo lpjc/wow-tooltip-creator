@@ -54,19 +54,19 @@
     margin-bottom: 10px;
   }
   
-  .tooltip-name {
-    color: #fff;
-    font-size: 15px;
-    font-weight: bold;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  .tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;  /* Maintain larger space after header */
   }
   
-  .talent-label {
-    color: #747474;
-    font-size: 12px;
-    padding: 2px 6px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
+  /* Add new wrapper styles */
+  .tooltip-attributes-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;  /* Reduced space between attribute rows */
+    margin-bottom: 8px;  /* Maintain larger space before description */
   }
   
   .tooltip-row {
@@ -74,7 +74,16 @@
     justify-content: space-between;
     align-items: flex-end;
     gap: 40px;
-    margin: 4px 0;
+    /* Removed margin here since gap is handled by wrapper */
+  }
+  
+
+    .talent-label {
+    color: #747474;
+    font-size: 12px;
+    padding: 2px 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
   }
   
   .tooltip-left {
@@ -99,7 +108,6 @@
   }
   
   .tooltip-description {
-    margin-top: 10px;
     color: #ffd100;
     line-height: 1.5;
     font-size: 13px;
