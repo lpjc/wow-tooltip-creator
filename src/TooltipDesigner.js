@@ -2,199 +2,237 @@
 import React, { useState, useEffect } from 'react';
 import IconSelector from './IconSelector';
 import AddAttributeButton from './AddAttributeButton';
-import AttributeField from './AttributeField';
+import CurrentTooltip from './CurrentTooltip';
 import './TooltipDesigner.css';
 
 function TooltipDesigner({ onSave, initialTooltipData }) {
-  const placeholderName = 'Click to edit name';
-  const placeholderDescription = 'Click to edit description';
-
   const [tooltipData, setTooltipData] = useState({
     icon: '',
-    name: placeholderName,
-    description: placeholderDescription,
+    name: 'Name',
+    description: 'Description',
     attributes: [],
   });
 
+  const [isIconSelectorOpen, setIsIconSelectorOpen] = useState(false);
+
   useEffect(() => {
     if (initialTooltipData) {
+      // Transform the attributes to include their values and types
+      const transformedAttributes = initialTooltipData.attributes.map(attr => {
+        // Parse the displayValue if it exists to get individual components
+        let value = attr.value || '';
+        let timeUnit = 'sec';
+        let type = '';
+        let castType = 'Cast';
+        let costType = 'Mana';
+
+        if (attr.displayValue) {
+          switch (attr.label) {
+            case 'Cooldown':
+              const cooldownParts = attr.displayValue.split(' ');
+              value = cooldownParts[0];
+              timeUnit = cooldownParts[1];
+              type = cooldownParts[2];
+              break;
+            case 'Cast Time':
+              if (attr.displayValue === 'Instant Cast') {
+                castType = 'Instant';
+              } else {
+                const castParts = attr.displayValue.split(' ');
+                value = castParts[0];
+                castType = castParts[2];
+              }
+              break;
+            case 'Cost':
+            case 'Secondary Cost':
+              const costParts = attr.displayValue.split(' ');
+              value = costParts[0];
+              costType = costParts.slice(1).join(' ');
+              break;
+            case 'Range':
+              value = attr.displayValue.split(' ')[0];
+              break;
+            case 'Requirements':
+              value = attr.displayValue.replace('Requires ', '');
+              break;
+            case 'Charges':
+              value = attr.displayValue.split(' ')[0];
+              break;
+            default:
+              break;
+          }
+        }
+
+        return {
+          label: attr.label,
+          value,
+          timeUnit,
+          type,
+          castType,
+          costType,
+        };
+      });
+
       setTooltipData({
         icon: initialTooltipData.icon || '',
-        name: initialTooltipData.name || placeholderName,
-        description: initialTooltipData.description || placeholderDescription,
-        attributes: initialTooltipData.attributes || [],
-      });
-    } else {
-      setTooltipData({
-        icon: '',
-        name: placeholderName,
-        description: placeholderDescription,
-        attributes: [],
+        name: initialTooltipData.name || 'Name',
+        description: initialTooltipData.description || 'Description',
+        attributes: transformedAttributes,
       });
     }
   }, [initialTooltipData]);
 
-  const [isIconSelectorOpen, setIsIconSelectorOpen] = useState(false);
-
-  // Function to update tooltip data
-  const updateTooltipData = (field, value) => {
-    setTooltipData({ ...tooltipData, [field]: value });
+  const handleEditField = (field, value) => {
+    if (field === 'attributes') {
+      setTooltipData({ ...tooltipData, attributes: value });
+    } else {
+      setTooltipData({ ...tooltipData, [field]: value });
+    }
   };
 
-  // Save function
-  const handleSave = () => {
-    onSave(tooltipData);
-  };
-
-  // Clear function
-  const handleClear = () => {
-    setTooltipData({
-      icon: '',
-      name: placeholderName,
-      description: placeholderDescription,
-      attributes: [],
-    });
-  };
-
-  // Function to toggle attribute
   const handleToggleAttribute = (attributeLabel) => {
     const existingAttributeIndex = tooltipData.attributes.findIndex(
       (attr) => attr.label === attributeLabel
     );
+    
     if (existingAttributeIndex > -1) {
       // Remove the attribute
       const updatedAttributes = [...tooltipData.attributes];
       updatedAttributes.splice(existingAttributeIndex, 1);
       setTooltipData({ ...tooltipData, attributes: updatedAttributes });
     } else {
-      // Add the attribute
+      // Add the attribute with appropriate default values
+      let newAttribute = { label: attributeLabel };
+      
+      switch (attributeLabel) {
+        case 'Cooldown':
+          newAttribute = {
+            ...newAttribute,
+            value: '',
+            timeUnit: 'sec',
+            type: 'cooldown'
+          };
+          break;
+        case 'Cast Time':
+          newAttribute = {
+            ...newAttribute,
+            value: '',
+            castType: 'Cast'
+          };
+          break;
+        case 'Cost':
+          newAttribute = {
+            ...newAttribute,
+            value: '',
+            costType: 'Mana'
+          };
+          break;
+        case 'Secondary Cost':
+          newAttribute = {
+            ...newAttribute,
+            value: '',
+            costType: 'Combo Points'
+          };
+          break;
+        case 'Range':
+          newAttribute = {
+            ...newAttribute,
+            value: ''
+          };
+          break;
+        case 'Requirements':
+          newAttribute = {
+            ...newAttribute,
+            value: ''
+          };
+          break;
+        case 'Talent':
+          newAttribute = {
+            ...newAttribute,
+            value: 'Talent'
+          };
+          break;
+        case 'Charges':
+          newAttribute = {
+            ...newAttribute,
+            value: ''
+          };
+          break;
+        default:
+          break;
+      }
+      
       setTooltipData({
         ...tooltipData,
-        attributes: [
-          ...tooltipData.attributes,
-          { label: attributeLabel, value: attributeLabel, type: 'text' },
-        ],
+        attributes: [...tooltipData.attributes, newAttribute],
       });
     }
+  };
+
+  const handleSave = () => {
+    // Transform attributes to include displayValue
+    const transformedData = {
+      ...tooltipData,
+      attributes: tooltipData.attributes.map(attr => {
+        let displayValue = attr.value;
+        
+        switch (attr.label) {
+          case 'Cooldown':
+            displayValue = `${attr.value} ${attr.timeUnit} ${attr.type}`;
+            break;
+          case 'Cast Time':
+            displayValue = attr.castType === 'Instant' 
+              ? 'Instant Cast'
+              : `${attr.value} sec ${attr.castType}`;
+            break;
+          case 'Cost':
+          case 'Secondary Cost':
+            displayValue = `${attr.value} ${attr.costType}`;
+            break;
+          case 'Range':
+            displayValue = `${attr.value} yards`;
+            break;
+          case 'Requirements':
+            displayValue = `Requires ${attr.value}`;
+            break;
+          case 'Charges':
+            displayValue = `${attr.value} charges`;
+            break;
+          default:
+            break;
+        }
+        
+        return {
+          ...attr,
+          displayValue
+        };
+      })
+    };
+    
+    onSave(transformedData);
+  };
+
+  const handleClear = () => {
+    setTooltipData({
+      icon: '',
+      name: 'Name',
+      description: 'Description',
+      attributes: [],
+    });
   };
 
   return (
     <div className="tooltip-designer-container">
       <div className="main-container">
         <div className="tooltip-preview-container">
-          <div className="left-column">
-            <div
-              className="preview-icon"
-              onClick={() => setIsIconSelectorOpen(true)}
-            >
-              {tooltipData.icon ? (
-                <img src={`/icons/${tooltipData.icon}`} alt="Icon" />
-              ) : (
-                <img
-                  src="https://db.ascension.gg/static/images/wow/icons/large/inv_misc_questionmark.jpg"
-                  alt="Default Icon"
-                />
-              )}
-            </div>
+          <div className="preview-section">
+            <CurrentTooltip
+              tooltipData={tooltipData}
+              onEditField={handleEditField}
+              onIconClick={() => setIsIconSelectorOpen(true)}
+            />
           </div>
-
-          <div className="tooltip-preview-body">
-            <div className="tooltip-design">
-              <div className="tooltip-content">
-                <div className="tooltip-header">
-                  <div
-                    className="tooltip-name"
-                    contentEditable
-                    suppressContentEditableWarning
-                    onFocus={(e) => {
-                      if (tooltipData.name === placeholderName) {
-                        e.target.innerText = '';
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const newValue = e.target.innerText.trim();
-                      updateTooltipData('name', newValue || placeholderName);
-                      if (!newValue) e.target.innerText = placeholderName;
-                    }}
-                  >
-                    {tooltipData.name}
-                  </div>
-                  {tooltipData.attributes.some(
-                    (attr) => attr.label === 'Talent'
-                  ) && <div className="talent-label">Talent</div>}
-                </div>
-
-                <div className="tooltip-attributes-container">
-                  <div className="tooltip-attributes-left">
-                    {tooltipData.attributes
-                      .filter(attr => attr.label !== 'Talent' && attr.label !== 'Cooldown')
-                      .map((attr, index) => (
-                        <AttributeField
-                          key={index}
-                          attribute={attr}
-                          updateAttribute={(newAttr) => {
-                            const updatedAttributes = [...tooltipData.attributes];
-                            updatedAttributes[
-                              tooltipData.attributes.findIndex(
-                                (a) => a.label === attr.label
-                              )
-                            ] = newAttr;
-                            setTooltipData({
-                              ...tooltipData,
-                              attributes: updatedAttributes,
-                            });
-                          }}
-                        />
-                      ))}
-                  </div>
-                  <div className="tooltip-attributes-right">
-                    {tooltipData.attributes
-                      .filter(attr => attr.label === 'Cooldown')
-                      .map((attr, index) => (
-                        <AttributeField
-                          key={index}
-                          attribute={attr}
-                          rightAligned={true}
-                          updateAttribute={(newAttr) => {
-                            const updatedAttributes = [...tooltipData.attributes];
-                            updatedAttributes[
-                              tooltipData.attributes.findIndex(
-                                (a) => a.label === attr.label
-                              )
-                            ] = newAttr;
-                            setTooltipData({
-                              ...tooltipData,
-                              attributes: updatedAttributes,
-                            });
-                          }}
-                        />
-                      ))}
-                  </div>
-                </div>
-
-                <div
-                  className="tooltip-description"
-                  contentEditable
-                  suppressContentEditableWarning
-                  onFocus={(e) => {
-                    if (tooltipData.description === placeholderDescription) {
-                      e.target.innerText = '';
-                    }
-                  }}
-                  onBlur={(e) => {
-                    const newValue = e.target.innerText.trim();
-                    updateTooltipData(
-                      'description',
-                      newValue || placeholderDescription
-                    );
-                    if (!newValue) e.target.innerText = placeholderDescription;
-                  }}
-                >
-                  {tooltipData.description}
-                </div>
-              </div>
-            </div>
-          </div>
+          
           <div className="action-buttons">
             <button onClick={handleSave} className="save-button">
               Save
@@ -216,7 +254,7 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
       {isIconSelectorOpen && (
         <IconSelector
           onSelect={(icon) => {
-            updateTooltipData('icon', icon);
+            handleEditField('icon', icon);
             setIsIconSelectorOpen(false);
           }}
           onClose={() => setIsIconSelectorOpen(false)}

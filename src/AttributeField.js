@@ -1,215 +1,225 @@
-import React, { useState, useEffect } from 'react';
+// AttributeField.js
+import React, { useState } from 'react';
 import './AttributeField.css';
 
-function AttributeField({ attribute, updateAttribute }) {
-  const { label } = attribute;
-  const placeholderText = label;
-  
-  const [value, setValue] = useState('');
-  const [dropdownValue, setDropdownValue] = useState(attribute.dropdownValue || '');
-  const [timeUnit, setTimeUnit] = useState('sec');
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [showTimeUnitDropdown, setShowTimeUnitDropdown] = useState(false);
-  const [unit, setUnit] = useState(attribute.unit || '');
-  const [suffix, setSuffix] = useState(attribute.suffix || '');
-  const [prefix, setPrefix] = useState(attribute.prefix || '');
+const AttributeField = ({ attribute, updateAttribute, rightAligned }) => {
+  const [focused, setFocused] = useState(false);
 
-  useEffect(() => {
-    switch (label) {
+  const getFieldComponents = () => {
+    switch (attribute.label) {
       case 'Cooldown':
-        setSuffix('cooldown');
-        setUnit('sec');
-        break;
-      case 'Cast Time':
-        setUnit('sec');
-        break;
-      case 'Range':
-        setUnit('yards');
-        break;
-      case 'Requirements':
-        setPrefix('Requires');
-        break;
-      default:
-        setPrefix('');
-        setSuffix('');
-        setUnit('');
-        break;
-    }
-  }, [label]);
-
-  const getOptions = () => {
-    switch (label) {
-      case 'Cooldown':
-        return ['cooldown', 'recharge'];
-      case 'Cast Time':
-        return ['Cast', 'Channeled', 'Instant'];
-      case 'Cost':
-        return [
-          'Astral Power',
-          'Energy',
-          'Focus',
-          'Fury',
-          'Maelstrom',
-          'Mana',
-          'Rage',
-          'Runes',
-        ];
-      case 'Secondary Cost':
-        return [
-          'Arcane Charges',
-          'Chi',
-          'Combo Points',
-          'Essence',
-          'Holy Power',
-          'Insanity',
-          'Runic Power',
-          'Soul Shards',
-        ];
-      default:
-        return [];
-    }
-  };
-
-  const getTimeUnits = () => ['sec', 'min', 'hr'];
-
-  const handleDropdownSelect = (option) => {
-    setDropdownValue(option);
-    setShowDropdown(false);
-
-    if (label === 'Cast Time') {
-      if (option === 'Instant') {
-        setValue('');
-        setUnit('');
-      } else {
-        setUnit('sec');
-      }
-    }
-
-    if (label === 'Cooldown') {
-      setSuffix(option);
-    }
-  };
-
-  const handleTimeUnitSelect = (selectedUnit) => {
-    setTimeUnit(selectedUnit);
-    setUnit(selectedUnit);
-    setShowTimeUnitDropdown(false);
-  };
-
-  useEffect(() => {
-    const displayValue = buildDisplayValue();
-    updateAttribute({
-      ...attribute,
-      value,
-      dropdownValue,
-      unit: label === 'Cooldown' ? timeUnit : unit,
-      suffix: label === 'Cooldown' ? dropdownValue : suffix,
-      prefix,
-      displayValue,
-    });
-  }, [value, dropdownValue, unit, suffix, prefix, timeUnit]);
-
-  const buildDisplayValue = () => {
-    if (label === 'Cast Time' && dropdownValue === 'Instant') {
-      return 'Instant';
-    }
-
-    const parts = [];
-    if (prefix) parts.push(prefix);
-    if (value) parts.push(value);
-    if ((unit || timeUnit) && value) {
-      parts.push(label === 'Cooldown' ? timeUnit : unit);
-    }
-    if (dropdownValue && 
-        !(label === 'Cast Time' && 
-          (dropdownValue === 'Cast' || dropdownValue === 'Channeled'))) {
-      parts.push(dropdownValue);
-    }
-    if (suffix && label !== 'Cooldown') parts.push(suffix);
-    return parts.join(' ');
-  };
-
-  return (
-    <div className="attribute-field">
-      <span className="attribute-content">
-        {prefix && <span className="attribute-prefix">{prefix} </span>}
-
-        <div
-          className={`tooltip-input ${!value ? 'placeholder-text' : ''}`}
-          contentEditable
-          suppressContentEditableWarning
-          onFocus={(e) => {
-            if (!value) {
-              e.target.textContent = '';
-            }
-          }}
-          onBlur={(e) => {
-            const newValue = e.target.textContent.trim();
-            setValue(newValue);
-            if (!newValue) {
-              e.target.textContent = placeholderText;
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              e.target.blur();
-            }
-          }}
-        >
-          {value || placeholderText}
-        </div>
-
-        {label === 'Cooldown' ? (
-          <>
-            <div
-              className="dropdown-container"
-              onMouseEnter={() => setShowTimeUnitDropdown(true)}
-              onMouseLeave={() => setShowTimeUnitDropdown(false)}
+        return (
+          <div className={`attribute-field ${rightAligned ? 'right-aligned' : ''}`}>
+            <input
+              type="text"
+              value={attribute.value || ''}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                value: e.target.value,
+                timeUnit: attribute.timeUnit || 'sec',
+                type: attribute.type || 'cooldown'
+              })}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder="0"
+              className="number-input"
+            />
+            <select
+              value={attribute.timeUnit || 'sec'}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                timeUnit: e.target.value
+              })}
+              className="time-unit-select"
             >
-              <span className={`attribute-dropdown-value ${!timeUnit ? 'default-value' : ''}`}>
-                {timeUnit} <span className="dropdown-arrow">▼</span>
-              </span>
-              {showTimeUnitDropdown && (
-                <ul className="dropdown-menu">
-                  {getTimeUnits().map((unit, index) => (
-                    <li key={index} onClick={() => handleTimeUnitSelect(unit)}>
-                      {unit}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </>
-        ) : (
-          unit && value && <span className="attribute-unit"> {unit}</span>
-        )}
+              <option value="sec">sec</option>
+              <option value="min">min</option>
+              <option value="hr">hr</option>
+            </select>
+            <select
+              value={attribute.type || 'cooldown'}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                type: e.target.value
+              })}
+              className="cooldown-type-select"
+            >
+              <option value="cooldown">Cooldown</option>
+              <option value="recharge">Recharge</option>
+            </select>
+          </div>
+        );
 
-        {getOptions().length > 0 && (
-          <div
-            className="dropdown-container"
-            onMouseEnter={() => setShowDropdown(true)}
-            onMouseLeave={() => setShowDropdown(false)}
-          >
-            <span className={`attribute-dropdown-value ${!dropdownValue ? 'default-value' : ''}`}>
-              {dropdownValue || 'Select'} <span className="dropdown-arrow">▼</span>
-            </span>
-            {showDropdown && (
-              <ul className="dropdown-menu">
-                {getOptions().map((option, index) => (
-                  <li key={index} onClick={() => handleDropdownSelect(option)}>
-                    {option}
-                  </li>
-                ))}
-              </ul>
+      case 'Cast Time':
+        return (
+          <div className="attribute-field">
+            {attribute.castType === 'Instant' ? (
+              <span className="instant-cast">Instant Cast</span>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  value={attribute.value || ''}
+                  onChange={(e) => updateAttribute({
+                    ...attribute,
+                    value: e.target.value
+                  })}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setFocused(false)}
+                  placeholder="0"
+                  className="number-input"
+                />
+                <span className="locked-unit">sec</span>
+                <select
+                  value={attribute.castType || 'Cast'}
+                  onChange={(e) => updateAttribute({
+                    ...attribute,
+                    castType: e.target.value,
+                    value: e.target.value === 'Instant' ? '' : attribute.value
+                  })}
+                  className="cast-type-select"
+                >
+                  <option value="Cast">Cast</option>
+                  <option value="Channel">Channel</option>
+                  <option value="Instant">Instant</option>
+                </select>
+              </>
             )}
           </div>
-        )}
+        );
 
-        {suffix && label !== 'Cooldown' && <span className="attribute-suffix"> {suffix}</span>}
-      </span>
-    </div>
-  );
-}
+      case 'Cost':
+        return (
+          <div className="attribute-field">
+            <input
+              type="text"
+              value={attribute.value || ''}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                value: e.target.value
+              })}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder="0"
+              className="number-input"
+            />
+            <select
+              value={attribute.costType || 'Mana'}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                costType: e.target.value
+              })}
+              className="resource-type-select"
+            >
+              {['Astral Power', 'Energy', 'Focus', 'Fury', 'Maelstrom', 'Mana', 'Rage', 'Runes']
+                .map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+            </select>
+          </div>
+        );
+
+      case 'Secondary Cost':
+        return (
+          <div className="attribute-field">
+            <input
+              type="text"
+              value={attribute.value || ''}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                value: e.target.value
+              })}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder="0"
+              className="number-input"
+            />
+            <select
+              value={attribute.costType || 'Combo Points'}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                costType: e.target.value
+              })}
+              className="resource-type-select"
+            >
+              {['Arcane Charges', 'Chi', 'Combo Points', 'Essence', 'Holy Power', 'Insanity', 'Runic Power', 'Soul Shards']
+                .map(type => (
+                  <option key={type} value={type}>{type}</option>
+                ))}
+            </select>
+          </div>
+        );
+
+      case 'Range':
+        return (
+          <div className="attribute-field">
+            <input
+              type="text"
+              value={attribute.value || ''}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                value: e.target.value
+              })}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder="0"
+              className="number-input"
+            />
+            <span className="locked-unit">yards</span>
+          </div>
+        );
+
+      case 'Requirements':
+        return (
+          <div className="attribute-field">
+            <span className="locked-prefix">Requires </span>
+            <input
+              type="text"
+              value={attribute.value || ''}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                value: e.target.value
+              })}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder="requirement"
+              className="text-input"
+            />
+          </div>
+        );
+
+      case 'Talent':
+        return (
+          <div className="attribute-field talent">
+            <span className="locked-text">Talent</span>
+          </div>
+        );
+
+      case 'Charges':
+        return (
+          <div className="attribute-field">
+            <input
+              type="text"
+              value={attribute.value || ''}
+              onChange={(e) => updateAttribute({
+                ...attribute,
+                value: e.target.value
+              })}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              placeholder="0"
+              className="number-input"
+            />
+            <span className="locked-unit">charges</span>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return getFieldComponents();
+};
 
 export default AttributeField;
