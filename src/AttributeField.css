@@ -1,58 +1,74 @@
 /* AttributeField.css */
 .attribute-field {
   display: flex;
-  align-items: center;
+  align-items: stretch; /* Changed from center to stretch */
   gap: 4px;
   margin: 2px 0;
   font-size: 12px;
   color: #ffffff;
+  min-height: fit-content; /* Ensures minimum height based on content */
 }
 
 .attribute-field.right-aligned {
   justify-content: flex-end;
 }
 
-.number-input {
-  width: 30px;
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  padding: 2px 4px;
-  border-radius: 2px;
-  font-size: 12px;
-  border: inset, 2px, #969696;
-}
-
-.text-input {
-  background: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  padding: 2px 4px;
-  border-radius: 2px;
-  font-size: 12px;
-  width: 120px;
-  border: inset, 2px, #969696;
-}
-
+/* Base styles for all interactive elements */
+.number-input,
+.text-input,
 .time-unit-select,
 .cooldown-type-select,
 .cast-type-select,
 .resource-type-select {
+  /* Remove any fixed height/padding that might affect sizing */
+  height: auto;
+  padding: 2px 4px;
+  /* Add common styles */
   background: rgba(0, 0, 0, 0.3);
   color: #fff;
-  border: inset, 2px, #969696;
-  padding: 1px 4px;
   border-radius: 2px;
   font-size: 12px;
+  border: inset 2px #969696;
+  /* Make all elements follow the same box model */
+  box-sizing: border-box;
+  /* Align text consistently */
+  display: flex;
+  align-items: center;
 }
 
+/* Specific widths for different input types */
+.number-input {
+  width: 30px;
+}
+
+.text-input {
+  width: 120px;
+}
+
+/* Fixed width for dropdowns */
+.resource-type-select {
+  max-width: 120px;
+}
+
+.cooldown-type-select,
+.cast-type-select {
+  max-width: 90px;
+}
+
+/* Ensure locked text elements align properly */
 .locked-unit,
 .locked-prefix,
 .locked-text {
   color: #ffffff;
   user-select: none;
+  display: flex;
+  align-items: center;
 }
 
 .instant-cast {
   color: #fff;
+  display: flex;
+  align-items: center;
 }
 
 .talent {
@@ -60,6 +76,8 @@
   background: rgba(0, 0, 0, 0.3);
   border-radius: 3px;
   color: #747474;
+  display: flex;
+  align-items: center;
 }
 
 /* Input focus styles */
@@ -85,14 +103,4 @@ select {
   background-repeat: no-repeat;
   background-position: right 4px center;
   background-size: 12px;
-}
-
-/* Ensure dropdowns don't overflow tooltip */
-.resource-type-select {
-  max-width: 120px;
-}
-
-.cooldown-type-select,
-.cast-type-select {
-  max-width: 90px;
 }
