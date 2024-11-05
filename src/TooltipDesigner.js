@@ -180,11 +180,13 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
           case 'Cooldown':
             displayValue = `${attr.value} ${attr.timeUnit} ${attr.type}`;
             break;
-          case 'Cast Time':
-            displayValue = attr.castType === 'Instant' 
-              ? 'Instant'
-              : `${attr.value} sec ${attr.castType}`;
-            break;
+            case 'Cast Time':
+              displayValue = attr.castType === 'Instant' 
+                  ? 'Instant'
+                  : attr.castType === 'Passive'
+                      ? 'Passive'
+                      : `${attr.value} sec ${attr.castType}`;
+              break;
           case 'Cost':
           case 'Secondary Cost':
             displayValue = `${attr.value} ${attr.costType}`;

@@ -54,7 +54,7 @@ const AttributeField = ({ attribute, updateAttribute, rightAligned }) => {
         return (
           <div className="attribute-field">
            
-            {attribute.castType !== 'Instant' && (
+           {attribute.castType !== 'Instant' && attribute.castType !== 'Passive' && (
               <>
                 <input
                   type="text"
@@ -79,7 +79,7 @@ const AttributeField = ({ attribute, updateAttribute, rightAligned }) => {
                   ...attribute,
                   castType: newCastType,
                   // Clear the value if switching to Instant
-                  value: newCastType === 'Instant' ? '' : attribute.value
+                  value: (newCastType === 'Instant' || newCastType === 'Passive') ? '' : attribute.value
                 });
               }}
               className="cast-type-select"
@@ -87,6 +87,7 @@ const AttributeField = ({ attribute, updateAttribute, rightAligned }) => {
               <option value="Instant">Instant</option>
               <option value="Cast">Cast</option>
               <option value="Channel">Channel</option>
+              <option value="Passive">Passive</option>
             </select>
           </div>
         );
