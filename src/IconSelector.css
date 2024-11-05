@@ -5,7 +5,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(43, 43, 43, 0.9);
+  background-color: rgba(43, 43, 43, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,30 +15,35 @@
 .icon-selector-content {
   background-color: #2b2b2b;
   padding: 20px;
+  height: fit-content;
   border-radius: 8px;
-  width: 80%;
-  max-height: 80%;
-  overflow: auto;
+  width: 950px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .icon-selector-header {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  gap: 10px;
 }
 
 .icon-selector label {
-  display: block;
   font-weight: bold;
-  margin-right: 10px;
   color: #fff;
+  white-space: nowrap;
 }
 
 .icon-selector input {
   flex-grow: 1;
   padding: 8px;
-  box-sizing: border-box;
-  margin-right: 10px;
+  border-radius: 4px;
+  border: 1px solid #3a3a3a;
+  background-color: #242424;
+  color: #fff;
 }
 
 .icon-selector button {
@@ -48,13 +53,28 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.icon-selector button:hover {
+  background-color: #4f9b98;
+}
+
+.icon-selector button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .icon-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+  padding: 10px;
+  background-color: #242424;
+  border-radius: 4px;
+  min-height: 300px;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 .image-wrapper {
@@ -63,45 +83,144 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ddd;
-  margin: 2px;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
   cursor: pointer;
+  background-color: #2b2b2b;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.image-wrapper:hover {
+  background-color: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .actual-image {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
-.icon-image.selected .actual-image {
-  border: 2px solid blue;
+.actual-image.visible {
+  opacity: 1;
+}
+
+.icon-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2b2b2b;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #3a3a3a;
+  border-top: 3px solid #5facaa;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 16px;
+}
+
+.loading-state .loading-spinner {
+  width: 48px;
+  height: 48px;
+}
+
+.loading-message {
+  color: #fff;
+  text-align: center;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.error-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff6b6b;
+  font-size: 24px;
+}
+
+.no-results {
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  opacity: 0.8;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 10px;
+  background: #2b2b2b;
+  border-top: 1px solid #3a3a3a;
+}
+
+.page-info {
+  color: #fff;
+  font-size: 0.9rem;
 }
 
 /* Scrollbar styling */
-.icon-selector-content::-webkit-scrollbar {
+.icon-grid::-webkit-scrollbar {
   width: 8px;
 }
 
-.icon-selector-content::-webkit-scrollbar-thumb {
+.icon-grid::-webkit-scrollbar-thumb {
   background-color: #5facaa;
   border-radius: 4px;
 }
 
-/* Pagination controls */
-.pagination-controls {
+.icon-grid::-webkit-scrollbar-track {
+  background-color: #1a1a1a;
+  border-radius: 4px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error message styling */
+.error-message {
+  color: #ff6b6b;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-radius: 4px;
   display: flex;
-  justify-content: center;
-  margin-top: 10px;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
 }
 
-.pagination-controls button {
-  margin: 0 5px;
-  padding: 8px 12px;
-  background-color: #5facaa;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.error-message button {
+  background-color: #ff6b6b;
 }
 
+.error-message button:hover {
+  background-color: #ff5252;
+}
