@@ -1,10 +1,11 @@
+// TooltipHistoryDrawer.jsx
 import React, { useState, useRef } from 'react';
 import SavedTooltip from './SavedTooltip';
 import './TooltipHistoryDrawer.css';
-import { FaChevronLeft, FaChevronRight, FaEdit, FaDownload } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaEdit, FaDownload, FaShareAlt } from 'react-icons/fa';
 import html2canvas from 'html2canvas';
 
-function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
+function TooltipHistoryDrawer({ savedTooltips, onEditTooltip, onShareTooltip }) {
   const [isOpen, setIsOpen] = useState(true);
   const tooltipRefs = useRef({});
 
@@ -47,18 +48,24 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip }) {
         <div className="history-list">
           {reversedTooltips.map((tooltipData, index) => (
             <div key={index} className="history-item">
-              <div ref={el => tooltipRefs.current[index] = el}>
+              <div className='tooltip-container' ref={el => (tooltipRefs.current[index] = el)}>
                 <SavedTooltip tooltipData={tooltipData} />
               </div>
               <div className="history-item-actions">
-                <button onClick={() => onEditTooltip(tooltipData)}>
+                <button className="button" onClick={() => onEditTooltip(tooltipData)}>
                   <FaEdit /> Edit
                 </button>
-                <button 
-                  className="download-button"
+                <button
+                  className="button download-button"
                   onClick={() => handleDownload(tooltipData, index)}
                 >
                   <FaDownload /> Download
+                </button>
+                <button
+                  className="button share-button"
+                  onClick={() => onShareTooltip(tooltipData)}
+                >
+                  <FaShareAlt /> Share
                 </button>
               </div>
             </div>

@@ -1,18 +1,125 @@
-/* SavedTooltip.css */
+/* TooltipHistoryDrawer.css */
 
-.tooltip-history-drawer{
-background-color: #303030;
-padding-left: 10px;
-overflow: scroll;
+.tooltip-history-drawer {
+  display: flex;
+  flex-direction: column;
+  background-color: #303030;
+  padding-left: 10px;
+  overflow-y: auto;
+  width: auto;
+  flex-shrink: 0;
 }
-.history-item{
+
+.tooltip-history-drawer.open {
+  /* No need for width here as it's already set to auto */
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.drawer-header h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 16px;
+}
+
+.toggle-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: #fff;
+  font-size: 16px;
+}
+
+.toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.history-item {
   display: flex;
   flex-direction: row;
+  align-items: flex-start;
   margin: 10px 0;
+  font-family: Arial, sans-serif;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.tooltip-container {
+  display: flex;
+  flex-direction: row;
   align-items: flex-start;
   font-family: Arial, sans-serif;
   gap: 10px;
 }
+
+.history-item-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.button {
+  padding: 8px 12px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+.download-button {
+  background-color: #4a90e2;
+}
+
+.download-button:hover {
+  background-color: #357abd;
+}
+
+.collapsed-history-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.collapsed-history-item {
+  margin: 5px 0;
+}
+
+.tooltip-icon-wrapper {
+  width: 32px;
+  height: 32px;
+}
+
+.collapsed-icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+/* SavedTooltip.css */
 
 .saved-tooltip-container {
   display: flex;
@@ -20,7 +127,8 @@ overflow: scroll;
   align-items: flex-start;
   font-family: Arial, sans-serif;
   border-radius: 8px;
-  width: fit-content;
+  width: auto;
+  flex-shrink: 0;
 }
 
 /* Styles for the large icon on the left */
