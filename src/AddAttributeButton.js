@@ -25,7 +25,7 @@ function AddAttributeButton({ attributes, onToggleAttribute }) {
             className={`attribute-toggle-btn ${isAdded ? 'remove' : 'add'}`}
             onClick={() => onToggleAttribute(attr)}
           >
-            {isAdded ? `Remove ${attr}` : `Add ${attr}`}
+            {isAdded ? `- ${attr}` : `+ ${attr}`}
           </button>
         );
       })}
