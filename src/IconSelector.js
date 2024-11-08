@@ -6,39 +6,42 @@ const ICONS_PER_PAGE = 50;
 
 function IconSelector({ onSelect, onClose }) {
   const [icons, setIcons] = useState([]);
-  const [filteredIcons, setFilteredIcons] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [imageCache, setImageCache] = useState(new Map());
+  const [totalPages, setTotalPages] = useState(1);
+  const imageCache = useRef(new Map()); // Changed from useState to useRef
   const modalRef = useRef(null);
   const abortControllerRef = useRef(null);
-  const pageLoadingRef = useRef(new Set());
 
-  // Fetch all icons once on component mount
+  // Fetch icons when component mounts or currentPage changes
   useEffect(() => {
-    const fetchAllIcons = async () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
+    // Cancel any ongoing fetch
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
 
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
+    const fetchIcons = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        
-        const response = await fetch(`${API_BASE_URL}/api/icons/all`, {
-          signal: controller.signal
-        });
-        
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/icons?page=${currentPage}&limit=${ICONS_PER_PAGE}`,
+          {
+            signal: controller.signal,
+          }
+        );
+
         if (!response.ok) throw new Error('Failed to fetch icons');
-        
+
         const data = await response.json();
+
         setIcons(data.icons);
-        setFilteredIcons(data.icons);
+        setTotalPages(data.totalPages);
       } catch (err) {
         if (err.name !== 'AbortError') {
           setError(err.message);
@@ -48,88 +51,64 @@ function IconSelector({ onSelect, onClose }) {
       }
     };
 
-    fetchAllIcons();
+    fetchIcons();
+
+    // Cleanup function to abort fetch on unmount or before next fetch
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
     };
-  }, []);
+  }, [currentPage]);
 
-  // Handle search and filtering
+  // Preload images for the current page only
   useEffect(() => {
-    const filtered = icons.filter(icon => 
-      icon.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredIcons(filtered);
-    setCurrentPage(1);
-  }, [searchTerm, icons]);
+    let isCancelled = false;
 
-  // Preload images for a specific page
-  const preloadPage = useCallback(async (page) => {
-    if (pageLoadingRef.current.has(page)) return;
-    
-    const startIndex = (page - 1) * ICONS_PER_PAGE;
-    const endIndex = startIndex + ICONS_PER_PAGE;
-    const pageIcons = filteredIcons.slice(startIndex, endIndex);
-    
-    pageLoadingRef.current.add(page);
-
-    await Promise.all(
-      pageIcons.map(async (iconName) => {
-        if (!imageCache.has(iconName)) {
-          try {
-            const img = new Image();
-            const loadPromise = new Promise((resolve, reject) => {
-              img.onload = () => resolve(img);
-              img.onerror = () => reject(new Error(`Failed to load ${iconName}`));
-            });
-            img.src = `/icons/${iconName}`;
-            await loadPromise;
-            setImageCache(prev => new Map(prev).set(iconName, true));
-          } catch (error) {
-            console.error(`Failed to load icon: ${iconName}`, error);
-          }
+    const preloadIcons = () => {
+      icons.forEach((iconName) => {
+        if (!imageCache.current.has(iconName)) {
+          const img = new Image();
+          img.onload = () => {
+            if (!isCancelled) {
+              imageCache.current.set(iconName, true);
+              // Force re-render to update the loaded images
+              // Since imageCache is now a ref, we need to trigger a re-render manually
+              setIcons((prevIcons) => [...prevIcons]);
+            }
+          };
+          img.onerror = () => {
+            console.error(`Failed to load icon: ${iconName}`);
+          };
+          img.src = `/icons/${iconName}`;
         }
-      })
-    );
-
-    pageLoadingRef.current.delete(page);
-  }, [filteredIcons, imageCache]);
-
-  // Preload current and adjacent pages
-  useEffect(() => {
-    const loadPages = async () => {
-      // Load current page first
-      await preloadPage(currentPage);
-      
-      // Then load adjacent pages
-      if (currentPage > 1) {
-        preloadPage(currentPage - 1);
-      }
-      preloadPage(currentPage + 1);
+      });
     };
 
-    loadPages();
-  }, [currentPage, preloadPage]);
+    preloadIcons();
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredIcons.length / ICONS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ICONS_PER_PAGE;
-  const displayedIcons = filteredIcons.slice(startIndex, startIndex + ICONS_PER_PAGE);
+    // Cleanup function to prevent state updates after component unmount
+    return () => {
+      isCancelled = true;
+    };
+  }, [icons]);
 
-  const handlePageChange = useCallback((newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  }, [totalPages]);
+  // Handle page change
+  const handlePageChange = useCallback(
+    (newPage) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        setCurrentPage(newPage);
+      }
+    },
+    [totalPages]
+  );
 
   // Optimized image component
   const IconImage = React.memo(({ iconName }) => {
-    const isLoaded = imageCache.has(iconName);
+    const isLoaded = imageCache.current.has(iconName);
 
     return (
-      <div 
+      <div
         className="image-wrapper"
         onClick={() => isLoaded && onSelect(iconName)}
         role="button"
@@ -150,7 +129,7 @@ function IconSelector({ onSelect, onClose }) {
     );
   });
 
-  // Handle click outside
+  // Handle click outside to close modal
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -165,14 +144,6 @@ function IconSelector({ onSelect, onClose }) {
     <div className="icon-selector-modal" role="dialog">
       <div ref={modalRef} className="icon-selector-content">
         <div className="icon-selector-header">
-          <label htmlFor="icon-search">Icon:</label>
-          <input
-            id="icon-search"
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search icons..."
-          />
           <button onClick={onClose}>Close</button>
         </div>
 
@@ -189,19 +160,16 @@ function IconSelector({ onSelect, onClose }) {
                   <div className="loading-spinner" />
                   <p>Loading icons...</p>
                 </div>
-              ) : displayedIcons.length > 0 ? (
-                displayedIcons.map((iconName) => (
-                  <IconImage 
-                    key={`${iconName}-${currentPage}`} 
-                    iconName={iconName} 
-                  />
+              ) : icons.length > 0 ? (
+                icons.map((iconName) => (
+                  <IconImage key={iconName} iconName={iconName} />
                 ))
               ) : (
                 <div className="no-results">No icons found.</div>
               )}
             </div>
 
-            {filteredIcons.length > 0 && (
+            {totalPages > 1 && (
               <div className="pagination-controls">
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
