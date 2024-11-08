@@ -4,40 +4,21 @@
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  background-color: #2b2b2b;
 }
+
 .app-container {
+  flex: 1;
   display: flex;
   flex-direction: row;
-  height: 100vh;
-  background-color: #2b2b2b; /* Dark background */
+  background-color: #2b2b2b;
   color: #fff;
+  overflow: hidden;
 }
 
-.main-content {
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-between;
-}
-
-.centered-tooltip {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.footer-menu {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #888; /* Gray background for footer */
-}
-
-.footer-button {
-  background-color: #ddd;
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  margin: 0 5px;
+/* Ensure TooltipDesigner doesn't overflow */
+.tooltip-designer-container {
+  min-height: 0 !important; /* Override the min-height: 100vh */
+  height: 100%;
+  overflow-y: auto;
 }

@@ -11,7 +11,7 @@ function App() {
 
   const handleSaveTooltip = (tooltipData) => {
     setSavedTooltips([...savedTooltips, tooltipData]);
-    setCurrentTooltipData(null); // Clear current tooltip after saving
+    setCurrentTooltipData(null);
   };
 
   const handleEditTooltip = (tooltipData) => {
@@ -30,9 +30,7 @@ function App() {
           onEditTooltip={handleEditTooltip}
         />
       </div>
-      <div className="footer-container">
-        <FooterMenu />
-      </div>
+      <FooterMenu />
     </div>
   );
 }
