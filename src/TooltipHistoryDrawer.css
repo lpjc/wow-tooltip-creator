@@ -74,29 +74,61 @@
 }
 
 .button {
-  padding: 8px 12px;
+  letter-spacing: 1.5px;
+  font-family: 'Skranji', cursive;
+  color: #d4d4d4;
   font-size: 14px;
+  font-weight: 400;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  padding: 8px 16px;
   display: flex;
   align-items: center;
-  gap: 5px;
-  background-color: #444;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
+  gap: 8px;
+  background: radial-gradient(circle, #383838, #2a2a2a);
+  border-top: 3px ridge #4a4a4a;
+  border-left: 3px groove #4a4a4a;
+  border-right: 3px ridge #4a4a4a;
+  border-bottom: 3px groove #4a4a4a;
+  box-shadow: inset 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
   cursor: pointer;
 }
 
 .button:hover {
-  background-color: #555;
+  background: radial-gradient(circle, #444444, #2a2a2a);
+  box-shadow: 0px 0 5px 5px rgba(255, 255, 255, 0.05);
+}
+
+.button:active {
+  background: radial-gradient(circle, #505050, #383838);
+  transform: translateY(1px);
 }
 
 .download-button {
-  background-color: #4a90e2;
+  background: radial-gradient(circle, #1a4a72, #0d3251);
+  border-top: 3px ridge #2a5a82;
+  border-left: 3px groove #2a5a82;
+  border-right: 3px ridge #2a5a82;
+  border-bottom: 3px groove #2a5a82;
 }
 
 .download-button:hover {
-  background-color: #357abd;
+  background: radial-gradient(circle, #225886, #1a4a72);
 }
+
+.download-button:active {
+  background: radial-gradient(circle, #2a6498, #225886);
+}
+
+.toggle-button {
+  background: transparent;
+}
+
+.toggle-button:active {
+  background: radial-gradient(circle, #505050, #383838);
+  transform: translateY(1px);
+}
+
 
 .collapsed-history-list {
   display: flex;

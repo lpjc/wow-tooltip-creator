@@ -1,28 +1,48 @@
-/* AddAttributeButton.css */
-.add-attribute-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
 .attribute-toggle-btn {
-  padding: 8px 12px;
-  font-size: 14px;
-  border: none;
-  border-radius: 16px;
+  letter-spacing: 1.5px;
+  font-family: 'Skranji', cursive;
+  font-size: 13px;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  padding: 6px 14px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 .attribute-toggle-btn.add {
-  background-color: #d46d3e;
-  color: #fff;
+  background: radial-gradient(circle, #383838, #2a2a2a);
+  border-top: 3px ridge #4a4a4a;
+  border-left: 3px groove #4a4a4a;
+  border-right: 3px ridge #4a4a4a;
+  border-bottom: 3px groove #4a4a4a;
+  color: #d4d4d4;
+  box-shadow: inset 0px 0px 4px 1px rgba(0, 0, 0, 0.3);
+}
+
+.attribute-toggle-btn.add:hover {
+  background: radial-gradient(circle, #444444, #2a2a2a);
+  box-shadow: 0px 0 4px 4px rgba(255, 255, 255, 0.05);
+}
+
+.attribute-toggle-btn.add:active {
+  background: radial-gradient(circle, #505050, #383838);
 }
 
 .attribute-toggle-btn.remove {
-  background-color: #e74c3c;
-  color: #fff;
+  background: radial-gradient(circle, #b65833, #8b4427);
+  border-top: 3px ridge #c66843;
+  border-left: 3px groove #c66843;
+  border-right: 3px ridge #c66843;
+  border-bottom: 3px groove #c66843;
+  color: #ffd7cc;
+  box-shadow: inset 0px 0px 4px 1px rgba(0, 0, 0, 0.3);
 }
 
-.attribute-toggle-btn:hover {
-  opacity: 0.8;
+.attribute-toggle-btn.remove:hover {
+  background: radial-gradient(circle, #c66843, #b65833);
+  box-shadow: 0px 0 4px 4px rgba(255, 255, 255, 0.05);
+}
+
+.attribute-toggle-btn.remove:active {
+  background: radial-gradient(circle, #d67853, #c66843);
 }
