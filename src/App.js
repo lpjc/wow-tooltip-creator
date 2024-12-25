@@ -9,6 +9,7 @@ import './App.css';
 function App() {
   const [savedTooltips, setSavedTooltips] = useState([]);
   const [currentTooltipData, setCurrentTooltipData] = useState(null);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const handleSaveTooltip = (tooltipData) => {
     setSavedTooltips([...savedTooltips, tooltipData]);
@@ -20,24 +21,27 @@ function App() {
   };
 
   return (
-  
-    <div className="app">
-      <Analytics/>
-      
-      <div className="app-container">
-        <TooltipDesigner
-          onSave={handleSaveTooltip}
-          initialTooltipData={currentTooltipData}
-        />
-        <TooltipHistoryDrawer
-          savedTooltips={savedTooltips}
-          onEditTooltip={handleEditTooltip}
-        />
+    <>
+      <div className="app">
+        <Analytics />
+        <div className="app-container">
+          <TooltipDesigner
+            onSave={handleSaveTooltip}
+            initialTooltipData={currentTooltipData}
+          />
+          <TooltipHistoryDrawer
+            savedTooltips={savedTooltips}
+            onEditTooltip={handleEditTooltip}
+            isOpen={isHistoryOpen}
+            onClose={() => setIsHistoryOpen(false)}
+          />
+        </div>
+        <FooterMenu />
+        <button className="history-button" onClick={() => setIsHistoryOpen(true)}>
+          Tooltip History
+        </button>
       </div>
-      <FooterMenu />
-    </div>
-  
-  
+    </>
   );
 }
 

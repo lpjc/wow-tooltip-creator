@@ -16,6 +16,46 @@
   overflow: hidden;
 }
 
+.history-button {
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #1a4a72;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+
+  .history-button {
+    display: block;
+  }
+
+  .tooltip-history-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .tooltip-history-drawer.open {
+    transform: translateX(0);
+  }
+}
+
 /* Ensure TooltipDesigner doesn't overflow */
 .tooltip-designer-container {
   min-height: 0 !important; /* Override the min-height: 100vh */
