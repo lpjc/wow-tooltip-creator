@@ -18,7 +18,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-
 }
 
 .drawer-header h2 {
@@ -56,9 +55,9 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  margin: 10px 0;
+  margin: 20px 0;
   font-family: Arial, sans-serif;
-  gap: 10px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
@@ -131,7 +130,6 @@
   background: radial-gradient(circle, #505050, #383838);
   transform: translateY(1px);
 }
-
 
 .collapsed-history-list {
   display: flex;
@@ -257,4 +255,23 @@
 
 .tooltip-attribute.right-aligned {
   text-align: right;
+}
+
+@media (max-width: 800px) {
+  .history-item {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .history-item-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+}
+@media (min-width: 800px) {
+  .toggle-button {
+    display: none;
+  }
 }
