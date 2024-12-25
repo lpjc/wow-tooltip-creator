@@ -270,3 +270,8 @@
     margin-top: 10px;
   }
 }
+@media (min-width: 769px) {
+  .toggle-button {
+    display: none;
+  }
+}
