@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaMagic } from 'react-icons/fa';
+import { FaHatWizard } from "react-icons/fa6";
 import './AIPromptInput.css';
 
 function AIPromptInput({ onPromptSubmit }) {
@@ -20,10 +20,19 @@ function AIPromptInput({ onPromptSubmit }) {
     setIsInputVisible(false);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
   return (
-    <div className="ai-prompt-input">
-      <button className="magic-button" onClick={handleButtonClick}>
-        <FaMagic />
+    <div className={`ai-prompt-input ${isInputVisible ? 'expanded' : ''}`}>
+      
+      <button className="magic-button" onClick={handleButtonClick}> 
+        <FaHatWizard className='magic-icon'/>
+        <br/>
+        Prompt-a-tooltip      
       </button>
       {isInputVisible && (
         <div className="prompt-container">
@@ -31,6 +40,7 @@ function AIPromptInput({ onPromptSubmit }) {
             type="text"
             value={prompt}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             placeholder="Enter your prompt"
           />
           <button onClick={handleSubmit}>Accept</button>

@@ -1,15 +1,46 @@
 .ai-prompt-input {
-  position: relative;
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
   display: flex;
   align-items: center;
+  transition: width 0.3s ease-in-out;
 }
 
-.magic-button {
-  background: transparent;
-  border: none;
+.ai-prompt-input.expanded {
+  width: fit-content;
+}
+
+.magic-button {  
+  letter-spacing: 1.5px;
+  font-family: 'Skranji', cursive;
+  font-size: 13px;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  background: radial-gradient(circle, #1a4a72, #0d3251);
+  border-top: 3px ridge #2a5a82;
+  border-left: 3px groove #2a5a82;
+  border-right: 3px ridge #2a5a82;
+  border-bottom: 3px groove #2a5a82;
+  color: #d4d4d4;
+  padding: 8px 16px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 24px;
-  color: #fff;
+  box-shadow: inset 0px 0px 5px 2px rgba(0, 0, 0, 0.3);
+}
+
+.magic-icon {
+  font-size: 20px;
+}
+
+.magic-button:hover {
+  background: radial-gradient(circle, #225886, #1a4a72);
+  box-shadow: 0px 0 5px 5px rgba(255, 255, 255, 0.05);
+}
+
+.magic-button:active {
+  background: radial-gradient(circle, #2a6498, #225886);
+  transform: translateY(1px);
 }
 
 .prompt-container {
@@ -20,16 +51,75 @@
 }
 
 .prompt-container input {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #4a4a4a;
+  background: radial-gradient(circle, #383838, #2a2a2a);
+  color: #d4d4d4;
+  font-family: 'Skranji', cursive;
+  font-size: 13px;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .prompt-container button {
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 14px;
+  border-radius: 6px;
   background-color: #5facaa;
   color: #fff;
   border: none;
   cursor: pointer;
+  font-family: 'Skranji', cursive;
+  font-size: 13px;
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.prompt-container button:hover {
+  background-color: #4e9a8a;
+}
+
+.prompt-container button:active {
+  background-color: #3e7a6a;
+}
+
+@media (max-width: 768px) {
+  .ai-prompt-input {
+    bottom: 10px;
+    left: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ai-prompt-input.expanded {
+    width: 90%;
+    left: 0;
+    padding: 0 10px;
+  }
+
+  .prompt-container {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 90%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .prompt-container input {
+    width: 90%;
+    margin-bottom: 10px;
+  }
+
+  .prompt-container button {
+    width: 20%;
+  }
+  .magic-button:hover {
+    background: radial-gradient(circle, #225886, #1a4a72);
+    box-shadow: 0px 0 0px 0px rgba(255, 255, 255, 0.05);
+  }
+  
+  .magic-button:active {
+    background: radial-gradient(circle, #2a6498, #225886);
+    transform: translateY(1px);
+  }
 }
