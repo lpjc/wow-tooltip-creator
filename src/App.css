@@ -33,6 +33,15 @@
   cursor: pointer;
 }
 
+.history-button .badge {
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 50%;
+  padding: 6px 10px;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
 @media (max-width: 800px) {
   .app-container {
     flex-direction: column;

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import TooltipDesigner from './TooltipDesigner';
 import TooltipHistoryDrawer from './TooltipHistoryDrawer';
 import FooterMenu from './FooterMenu';
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
 import './App.css';
 
 function App() {
@@ -37,8 +37,9 @@ function App() {
           />
         </div>
         <FooterMenu />
-        <button className="history-button" onClick={() => setIsHistoryOpen(true)}>
+        <button className="history-button" onClick={() => setIsHistoryOpen(!isHistoryOpen)}>
           Tooltip History
+          {savedTooltips.length > 0 && <span className="badge">{savedTooltips.length}</span>}
         </button>
       </div>
     </>
