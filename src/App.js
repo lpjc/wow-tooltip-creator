@@ -22,6 +22,7 @@ function App() {
   return (
   
     <div className="app">
+      <Analytics/>
       
       <div className="app-container">
         <TooltipDesigner
