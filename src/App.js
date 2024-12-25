@@ -20,8 +20,9 @@ function App() {
   };
 
   return (
+    <>
     <div className="app">
-      <Analytics/>
+      
       <div className="app-container">
         <TooltipDesigner
           onSave={handleSaveTooltip}
@@ -34,6 +35,8 @@ function App() {
       </div>
       <FooterMenu />
     </div>
+    <Analytics/>
+    </>
   );
 }
 
