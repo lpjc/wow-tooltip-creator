@@ -1,0 +1,35 @@
+.ai-prompt-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.magic-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #fff;
+}
+
+.prompt-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.prompt-container input {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.prompt-container button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #5facaa;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}

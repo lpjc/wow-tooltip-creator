@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import IconSelector from './IconSelector';
 import AddAttributeButton from './AddAttributeButton';
 import CurrentTooltip from './CurrentTooltip';
+import AIPromptInput from './AIPromptInput';
 import './TooltipDesigner.css';
 
 function TooltipDesigner({ onSave, initialTooltipData }) {
@@ -223,6 +224,10 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
     });
   };
 
+  const handlePromptSubmit = (prompt) => {
+    console.log('Prompt submitted:', prompt);
+  };
+
   return (
     <div className="tooltip-designer-container">
       <div className="main-container">
@@ -252,6 +257,8 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
           />
         </div>
       </div>
+
+      <AIPromptInput onPromptSubmit={handlePromptSubmit} />
 
       {isIconSelectorOpen && (
         <IconSelector
