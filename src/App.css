@@ -33,7 +33,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 868px) {
+@media (max-width: 800px) {
   .app-container {
     flex-direction: column;
   }
