@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import TooltipDesigner from './TooltipDesigner';
 import TooltipHistoryDrawer from './TooltipHistoryDrawer';
 import FooterMenu from './FooterMenu';
+import { Analytics } from "@vercel/analytics/react"
 import './App.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <div className="app">
+      <Analytics/>
       <div className="app-container">
         <TooltipDesigner
           onSave={handleSaveTooltip}
