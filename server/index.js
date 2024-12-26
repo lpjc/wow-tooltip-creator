@@ -60,7 +60,7 @@ app.post('/api/openai', openaiHandler);
 
 // Default/catch-all
 app.all('*', (req, res) => {
-  res.json({ message: 'Welcome to the WoW Tooltip API' });
+  res.json({ message: 'Welcome to the WoW Tooltip APIzzzz' });
 });
 
 app.listen(PORT, () => {

@@ -27,32 +27,36 @@ function AIPromptInput({ onPromptSubmit }) {
       const messages = [
         {
           role: 'system',
-          content:
-            'You specialize in generating unique and creative WoW abilities...'
+          content: 'You specialize in generating unique and creative WoW abilities...'
         },
         { role: 'user', content: prompt }
       ];
   
-      // Full server URL for local development
-      const serverUrl =
-        process.env.NODE_ENV === 'production'
-          ? '' // Leave empty for production, React will assume same origin
-          : 'http://localhost:5000';
-  
-      const response = await fetch(`${serverUrl}/api/openai`, {
+      // Determine the base URL based on environment
+      const baseUrl = process.env.NODE_ENV === 'development' 
+        ? 'http://localhost:5000'
+        : '';
+      
+      const response = await fetch(`${baseUrl}/api/openai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages }),
       });
   
       if (!response.ok) {
-        throw new Error('Failed to fetch from /api/openai');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
   
       const data = await response.json();
       console.log('AI Response:', data.content);
+      
+      // Call onPromptSubmit with the response data if it exists
+      if (onPromptSubmit) {
+        onPromptSubmit(JSON.parse(data.content));
+      }
+  
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);
     } finally {
       setIsLoading(false);
       setPrompt('');
