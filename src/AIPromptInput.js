@@ -14,11 +14,43 @@ function AIPromptInput({ onPromptSubmit }) {
     setPrompt(e.target.value);
   };
 
-  const handleSubmit = () => {
-    onPromptSubmit(prompt);
-    setPrompt('');
-    setIsInputVisible(false);
+  const handleSubmit = async () => {
+    try {
+      const messages = [
+        {
+          role: 'system',
+          content:
+            'You specialize in generating unique and creative WoW abilities...'
+        },
+        { role: 'user', content: prompt }
+      ];
+  
+      // Full server URL for local development
+      const serverUrl =
+        process.env.NODE_ENV === 'production'
+          ? '' // Leave empty for production, React will assume same origin
+          : 'http://localhost:5000';
+  
+      const response = await fetch(`${serverUrl}/api/openai`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch from /api/openai');
+      }
+  
+      const data = await response.json();
+      console.log('AI Response:', data.content);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setPrompt('');
+      setIsInputVisible(false);
+    }
   };
+  
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -28,11 +60,10 @@ function AIPromptInput({ onPromptSubmit }) {
 
   return (
     <div className={`ai-prompt-input ${isInputVisible ? 'expanded' : ''}`}>
-      
-      <button className="magic-button" onClick={handleButtonClick}> 
+      <button className="magic-button" onClick={handleButtonClick}>
         <FaHatWizard className='magic-icon'/>
         <br/>
-        Prompt-a-tooltip      
+        Prompt-a-tooltip
       </button>
       {isInputVisible && (
         <div className="prompt-container">
