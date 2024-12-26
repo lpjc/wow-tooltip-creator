@@ -95,7 +95,7 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
     const existingAttributeIndex = tooltipData.attributes.findIndex(
       (attr) => attr.label === attributeLabel
     );
-    
+
     if (existingAttributeIndex > -1) {
       // Remove the attribute
       const updatedAttributes = [...tooltipData.attributes];
@@ -104,11 +104,11 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
     } else {
       // Add the attribute with appropriate default values
       let newAttribute = { label: attributeLabel };
-      
+
       switch (attributeLabel) {
         case 'Cooldown':
           newAttribute = {
-            ...newAttribute,
+            ...newAttribute, 
             value: '',
             timeUnit: 'sec',
             type: 'cooldown'
@@ -162,7 +162,7 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
         default:
           break;
       }
-      
+
       setTooltipData({
         ...tooltipData,
         attributes: [...tooltipData.attributes, newAttribute],
@@ -224,8 +224,79 @@ function TooltipDesigner({ onSave, initialTooltipData }) {
     });
   };
 
-  const handlePromptSubmit = (prompt) => {
-    console.log('Prompt submitted:', prompt);
+  const handlePromptSubmit = (promptResponse) => {
+    // Start with base tooltip data
+    const newTooltipData = {
+      name: promptResponse.name,
+      description: promptResponse.description,
+      icon: promptResponse.icon,
+      attributes: []
+    };
+  
+    // Map AI response fields to attributes
+    if (promptResponse.cooldown) {
+      newTooltipData.attributes.push({
+        label: 'Cooldown',
+        value: promptResponse.cooldown.value,
+        timeUnit: promptResponse.cooldown.timeUnit,
+        type: promptResponse.cooldown.type
+      });
+    }
+  
+    if (promptResponse.castTime) {
+      newTooltipData.attributes.push({
+        label: 'Cast Time',
+        value: promptResponse.castTime.value,
+        castType: promptResponse.castTime.castType
+      });
+    }
+  
+    if (promptResponse.cost) {
+      newTooltipData.attributes.push({
+        label: 'Cost',
+        value: promptResponse.cost.value,
+        costType: promptResponse.cost.costType
+      });
+    }
+  
+    if (promptResponse.secondaryCost) {
+      newTooltipData.attributes.push({
+        label: 'Secondary Cost',
+        value: promptResponse.secondaryCost.value,
+        costType: promptResponse.secondaryCost.costType
+      });
+    }
+  
+    if (promptResponse.range) {
+      newTooltipData.attributes.push({
+        label: 'Range',
+        value: promptResponse.range.value
+      });
+    }
+  
+    if (promptResponse.requirements) {
+      newTooltipData.attributes.push({
+        label: 'Requirements',
+        value: promptResponse.requirements.value
+      });
+    }
+  
+    if (promptResponse.talent) {
+      newTooltipData.attributes.push({
+        label: 'Talent',
+        value: 'Talent'
+      });
+    }
+  
+    if (promptResponse.charges) {
+      newTooltipData.attributes.push({
+        label: 'Charges',
+        value: promptResponse.charges.value
+      });
+    }
+  
+    // Single state update
+    setTooltipData(newTooltipData);
   };
 
   return (
