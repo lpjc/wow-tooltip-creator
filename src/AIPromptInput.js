@@ -30,7 +30,7 @@ function AIPromptInput({ onPromptSubmit }) {
       const messages = [
         {
           role: 'system',
-          content: 'You specialize in generating unique and creative WoW abilities...',
+          content: 'You are an expert game designer specializing in creating unique and imaginative World of Warcraft (WoW) abilities. You have a deep understanding of WoWs gameplay mechanics, terminology, and class dynamics. Your task is to design innovative abilities that align with the games lore, balance, and player expectations, while introducing fresh gameplay elements. Think creatively and ensure your designs are both engaging and practical within the WoW universe. Charges are 0 unless its 2 or more, never 1.',
         },
         { role: 'user', content: prompt },
       ];
@@ -103,7 +103,10 @@ function AIPromptInput({ onPromptSubmit }) {
       const iconResponse = await fetch(`${baseUrl}/api/find-icon`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ colors: queryData.colors }),
+        body: JSON.stringify({ 
+          colors: queryData.colors,
+          spellDescription: parsedTooltip.description // Add spell description
+        }),
       });
   
       console.log('Icon response status:', iconResponse.status);
