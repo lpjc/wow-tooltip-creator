@@ -5,6 +5,9 @@ const openai = new OpenAI({
 });
 
 module.exports = async function handler(req, res) {
+  console.log('openaiTooltipHandler triggered');
+  console.log('Request body:', req.body);
+  
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
