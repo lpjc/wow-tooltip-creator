@@ -92,7 +92,8 @@ function AIPromptInput({ onPromptSubmit }) {
       const queryData = await queryResponse.json();
       console.log('Raw Query Data:', queryData);
   
-      if (!queryData || !queryData.query) {
+      // Update validation check
+      if (!queryData || !queryData.colors) {
         console.error('Query API returned invalid data:', queryData);
         throw new Error('Query data is missing or invalid.');
       }

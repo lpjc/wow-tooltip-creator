@@ -22,7 +22,7 @@ module.exports = async function openaiQueryHandler(req, res) {
         },
         {
           role: 'user',
-          content: `Given this spell description, suggest primary and secondary colors that would match its theme:\nSpell: ${attributes.description}`,
+          content: `Given the orinial prompt: ${prompt} and the spell description, suggest primary and secondary colors that would match its theme:\nSpell: ${attributes.description}`,
         },
       ],
       response_format: {
@@ -52,12 +52,13 @@ module.exports = async function openaiQueryHandler(req, res) {
       },
     });
 
-    console.log('OpenAI Response:', response.choices[0].message); // Debug log
-    const colors = JSON.parse(response.choices[0].message.content);
+    console.log('Raw OpenAI Response:', response.choices[0].message); // Debug log
+    const colors = response.choices[0].message.content;
+    console.log('Parsed colors:', colors);
 
-    res.status(200).json({ colors });
+    res.status(200).json({ colors: JSON.parse(colors) });
   } catch (error) {
-    console.error('OpenAI Query Error:', error.response?.data || error.message || error);
+    console.error('Full OpenAI Error:', error);
     res.status(500).json({ error: 'Error generating color query' });
   }
 };
