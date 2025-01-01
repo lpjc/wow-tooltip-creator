@@ -49,14 +49,11 @@ module.exports = async function findIconHandler(req, res) {
       messages: [
         {
           role: 'system',
-          content: `You are an expert at matching spell descriptions with appropriate icons. Select the most thematically appropriate icon based on the description.`
+          content: 'You are an expert at matching icons to spell descriptions. You must return only a selected_index number.'
         },
         {
           role: 'user',
-          content: `Given this spell description: "${spellDescription}"
-Available icons (${icons.length}):
-${JSON.stringify(icons, null, 2)}
-Select the most appropriate icon index (0-${icons.length-1}).`
+          content: `Select the best icon index (0-${icons.length-1}) for this spell: "${spellDescription}"\n\nIcons:\n${JSON.stringify(icons, null, 2)}`
         }
       ],
       response_format: {
@@ -80,12 +77,26 @@ Select the most appropriate icon index (0-${icons.length-1}).`
     });
 
     console.log('Full AI Response:', response.choices[0].message);
-    const selection = JSON.parse(response.choices[0].message.content);
-    console.log('Selected Index:', selection.selected_index);
+    let selectedIndex;
+    
+    try {
+      const selection = JSON.parse(response.choices[0].message.content);
+      selectedIndex = selection.selected_index;
+      
+      if (selectedIndex === undefined || selectedIndex >= icons.length) {
+        console.warn('Invalid index, defaulting to 0');
+        selectedIndex = 0;
+      }
+    } catch (error) {
+      console.error('Error parsing AI response:', error);
+      selectedIndex = 0;
+    }
+
+    console.log('Selected Index:', selectedIndex);
 
     // Return selected icon
     res.status(200).json({
-      icons: [icons[selection.selected_index]]
+      icons: [icons[selectedIndex]]
     });
 
   } catch (error) {

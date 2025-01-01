@@ -23,9 +23,10 @@ app.use((req, res, next) => {
 // Middleware
 app.use(cors({
   origin: [
-    'http://localhost:3000', 
+    'http://localhost:3000',
     'http://localhost:5000',
     'https://wow-tooltip-creator.vercel.app',
+    'https://wow-tooltip-creator-mprigk9rj-lpjcs-projects.vercel.app', 
     'https://WoWTooltipMaker.com'
   ]
 }));
