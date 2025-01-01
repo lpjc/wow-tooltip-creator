@@ -7,7 +7,7 @@ const path = require('path');
 const fs = require('fs').promises;
 
 // Import your OpenAI route handler from the new file
-const openaiHandler = require('./openai');
+const openaiHandler = require('../api/openai');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
