@@ -30,7 +30,7 @@ function AIPromptInput({ onPromptSubmit }) {
       const messages = [
         {
           role: 'system',
-          content: 'You are an expert game designer specializing in World of Warcraft (WoW) abilities. You understand WoWs mechanics, terminology, and class dynamics. Your task is to design creative, balanced abilities aligned with the gameSs lore. Use talents, charges, and requirements only when explicitly specified by the user. Default charge is 0 unless it’s 2 or more; never 1.',
+          content: 'You are an expert game designer specializing in World of Warcraft (WoW) abilities. You understand WoWs mechanics, terminology, and class dynamics. Your task is to design creative, balanced abilities aligned with the gameSs lore. Use only talents, charges, and requirements only when explicitly specified by the user. Default charge is 0 unless it’s 2 or more; never 1.',
         },
         { role: 'user', content: prompt },
       ];

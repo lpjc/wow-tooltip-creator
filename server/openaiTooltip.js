@@ -145,7 +145,7 @@ module.exports = async function handler(req, res) {
               },
               requirements: {
                 type: 'object',
-                description: "Requirements field, storing only the text after the locked prefix 'Requires '.",
+                description: "Seldomly used, default is empty. Requirements field, storing only the text after the locked prefix 'Requires '.",
                 properties: {
                   value: {
                     type: 'string',
@@ -157,11 +157,11 @@ module.exports = async function handler(req, res) {
               },
               talent: {
                 type: 'boolean',
-                description: 'Indicates if this is a Talent (UI has a locked text Talent).',
+                description: 'Indicates if this is a Talent (UI has a locked text Talent). Seldomly used. Default is false.',
               },
               charges: {
                 type: 'object',
-                description: 'Charges field (numeric count).',
+                description: 'Charges field (numeric count). Seldomly used. Default is empty.',
                 properties: {
                   value: {
                     type: 'number',
