@@ -289,6 +289,9 @@
 .close-overlay-button:hover {
   color: #fff;
 }
+.close-overlay-button:disabled {
+  opacity: 0.2;
+}
 
 /* Add after the loading spinner styles */
 .loading-overlay {
@@ -299,6 +302,7 @@
   height: fill;
   background: rgb(0, 0, 0);
   display: flex;
+  gap: 10px;
   flex-direction: column;
   align-items: center;
   justify-content: center;

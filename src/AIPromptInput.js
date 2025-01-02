@@ -80,6 +80,7 @@ function AIPromptInput({ onPromptSubmit }) {
 
   const handleSubmit = async () => {
     setIsLoading(true);
+    setLoadingMessage(loadingMessages[Math.floor(Math.random() * loadingMessages.length)]);
     console.log('HandleSubmit triggered with prompt:', prompt);
   
     try {
@@ -250,7 +251,7 @@ function AIPromptInput({ onPromptSubmit }) {
 
       {isMobile ? (
         <div className={`ai-prompt-input-container ${isInputVisible ? 'expanded' : ''}`}>
-          <button className="close-overlay-button" onClick={() => setIsInputVisible(false)}>
+          <button className="close-overlay-button" onClick={() => setIsInputVisible(false)} disabled={isLoading}>
             <FaChevronDown />
           </button>
           <div className="ai-prompt-input-border">
