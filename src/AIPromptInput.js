@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaHatWizard } from "react-icons/fa6";
+import React, { useState, useEffect } from 'react';
+import { FaHatWizard, FaMagic, FaChevronDown } from "react-icons/fa6";
 import './AIPromptInput.css';
 import { API_BASE_URL } from './config';
 
@@ -7,10 +7,31 @@ function AIPromptInput({ onPromptSubmit }) {
   const [isInputVisible, setIsInputVisible] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  const handleButtonClick = () => {
-    setIsInputVisible(!isInputVisible);
-  };
+  // Add effect to manage body class
+  useEffect(() => {
+    if (isInputVisible) {
+      document.body.classList.add('prompt-open');
+    } else {
+      document.body.classList.remove('prompt-open');
+    }
+    
+    // Cleanup
+    return () => {
+      document.body.classList.remove('prompt-open');
+    };
+  }, [isInputVisible]);
+
+  // Add window resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleInputChange = (e) => {
     if (e.target.value.length <= 400) {
@@ -124,10 +145,11 @@ function AIPromptInput({ onPromptSubmit }) {
       if (onPromptSubmit) {
         const tooltipWithIcon = {
           ...parsedTooltip,
-          icon: icons.length > 0 ? icons[0].filename : '', // Assign first matching icon or leave empty
+          icon: icons.length > 0 ? icons[0].filename : '',
         };
         console.log('Final Tooltip with Icon:', tooltipWithIcon);
         onPromptSubmit(tooltipWithIcon);
+        setIsInputVisible(false);
       }
     } catch (error) {
       console.error('Error in handleSubmit:', error);
@@ -146,50 +168,83 @@ function AIPromptInput({ onPromptSubmit }) {
   };
 
   return (
-    <div className={`ai-prompt-input-container ${isInputVisible ? 'expanded' : ''}`}>
-     
-      {isInputVisible && (
-        <div className="ai-prompt-input-border">
-          <div className="prompt-container">
-            <textarea
-              type="text"
-              className='prompt-input'
-              value={prompt}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Example: A druid spell that tosses a sapling to deal damage and slow the targets in AoE"
-            />
-            <div className="prompt-actions">
-            {isLoading && <div className="loading-spinner"></div>}
-              
-              <button
-                className="generate-btn"
-                onClick={handleSubmit}
-                disabled={isLoading}
-              >
-                {isLoading ? 'Generating...' : 'Generate Tooltip'}
-              </button>
-              <span className="char-counter">
-                
-                <button className="clear-btn" onClick={clearPrompt}>
-                  Clear
-                </button>
-                {prompt.length}/400
-              </span>
-            </div>
-            
-          </div>
-         
-        </div>
-      )}
-       <button className="magic-button" onClick={handleButtonClick}>
+    <>
+      <button className="magic-button" onClick={() => setIsInputVisible(!isInputVisible)}>
         <span className="beta-label">Beta</span>
-        <FaHatWizard className='magic-icon'/>
-        <br/>
+        <FaHatWizard className="magic-icon" />
+        <br />
         Prompt-a-tooltip
       </button>
 
-    </div>
+      {isMobile ? (
+        // Mobile overlay
+        <div className={`ai-prompt-input-container ${isInputVisible ? 'expanded' : ''}`}>
+          <button className="close-overlay-button" onClick={() => setIsInputVisible(false)}>
+            <FaChevronDown />
+          </button>
+          <div className="ai-prompt-input-border">
+            <div className="prompt-container">
+              <textarea
+                type="text"
+                className='prompt-input'
+                value={prompt}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Example: A druid spell that tosses a sapling to deal damage and slow the targets in AoE"
+              />
+              <div className="prompt-actions">
+                {isLoading && <div className="loading-spinner"></div>}
+                <button
+                  className="generate-btn"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Generating...' : 'Generate Tooltip'}
+                </button>
+                <span className="char-counter">
+                  <button className="clear-btn" onClick={clearPrompt}>
+                    Clear
+                  </button>
+                  {prompt.length}/400
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        // Desktop popup
+        <div className={`ai-prompt-input ${isInputVisible ? 'expanded' : ''}`}>
+          <div className="ai-prompt-input-border">
+            <div className="prompt-container">
+              <textarea
+                type="text"
+                className='prompt-input'
+                value={prompt}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Example: A druid spell that tosses a sapling to deal damage and slow the targets in AoE"
+              />
+              <div className="prompt-actions">
+                {isLoading && <div className="loading-spinner"></div>}
+                <button
+                  className="generate-btn"
+                  onClick={handleSubmit}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Generating...' : 'Generate Tooltip'}
+                </button>
+                <span className="char-counter">
+                  <button className="clear-btn" onClick={clearPrompt}>
+                    Clear
+                  </button>
+                  {prompt.length}/400
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

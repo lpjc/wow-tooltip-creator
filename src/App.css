@@ -51,6 +51,16 @@
     display: block;
   }
 
+  .app.prompt-open .app-container {
+    filter: blur(3px);
+    pointer-events: none;
+  }
+
+  .app.prompt-open .history-button {
+    filter: blur(3px);
+    pointer-events: none;
+  }
+
   .tooltip-history-drawer {
     position: fixed;
     top: 0;

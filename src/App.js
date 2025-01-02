@@ -10,6 +10,7 @@ function App() {
   const [savedTooltips, setSavedTooltips] = useState([]);
   const [currentTooltipData, setCurrentTooltipData] = useState(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isPromptOpen, setIsPromptOpen] = useState(false);
 
   const handleSaveTooltip = (tooltipData) => {
     setSavedTooltips([...savedTooltips, tooltipData]);
@@ -22,12 +23,13 @@ function App() {
 
   return (
     <>
-      <div className="app">
+      <div className={`app ${isPromptOpen ? 'prompt-open' : ''}`}>
         <Analytics />
         <div className="app-container">
           <TooltipDesigner
             onSave={handleSaveTooltip}
             initialTooltipData={currentTooltipData}
+            onPromptOpen={setIsPromptOpen}
           />
           <TooltipHistoryDrawer
             savedTooltips={savedTooltips}
