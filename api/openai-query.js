@@ -36,12 +36,12 @@ export default async function handler(req, res) {
             properties: {
               primary_color: {
                 type: 'string',
-                enum: ['red', 'blue', 'green', 'purple', 'yellow', 'white', 'black'],
+                enum: ['purple', 'light blue', 'dark brown', 'turquoise', 'teal', 'golden', 'black', 'cyan', 'silver', 'bronze', 'brown', 'gold', 'yellow', 'white', 'beige', 'dark purple', 'green', 'blue', 'dark gray', 'dark blue', 'pink', 'red', 'dark red', 'orange', 'grey', 'dark green', 'gray'],
                 description: 'Primary color representing the spell theme.',
               },
               secondary_color: {
                 type: 'string',
-                enum: ['red', 'blue', 'green', 'purple', 'yellow', 'white', 'black'],
+                enum: ['turquoise', 'black', 'beige', 'grey', 'dark brown', 'light blue', 'cream', 'light gray', 'yellow', 'green', 'dark blue', 'light green', 'gray', 'gold', 'brown', 'dark purple', 'blue', 'dark gray', 'red', 'dark red', 'purple', 'teal', 'light yellow', 'cyan', 'silver', 'white', 'tan', 'pink', 'orange', 'dark green'],
                 description: 'Secondary color representing the spell theme.',
               },
             },
