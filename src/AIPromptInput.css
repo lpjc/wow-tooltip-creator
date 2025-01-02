@@ -200,6 +200,7 @@
     right: 20px;
     left: auto;
     z-index: 999;
+    width: 85%;
   }
 
   .ai-prompt-input-container {
@@ -247,12 +248,14 @@
   .prompt-container {
     width: 100%;
     display: flex;
+    align-self: center;
     flex-direction: column;
     gap: 15px;
+    margin: 0;
   }
 
   .prompt-container textarea {
-    width: 100%;
+    width: 85%;
     min-height: 120px;
     font-size: 16px;
     resize: vertical;
