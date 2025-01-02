@@ -1,6 +1,6 @@
 .ai-prompt-input {
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   left: 30px;
   display: flex;
   align-items: center;
@@ -24,7 +24,6 @@
 
 /* Subtle border & shadow for the prompt area */
 .ai-prompt-input-border {
-  margin-bottom: 10px;
   padding: 16px;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.3);
@@ -167,13 +166,13 @@
   transition: background-color 0.2s ease;
 }
 
-.generate-btn:hover {
-  background-color: #0093ff;
+.prompt-container button.generate-btn:disabled {
+  cursor: default;
+  opacity: 0;
 }
 
-.generate-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
+.generate-btn:hover {
+  background-color: #0093ff;
 }
 
 /* Loading spinner (simple CSS approach) */
@@ -289,4 +288,43 @@
 
 .close-overlay-button:hover {
   color: #fff;
+}
+
+/* Add after the loading spinner styles */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: fill;
+  background: rgb(0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  backdrop-filter: blur(3px);
+}
+
+.loading-message {
+  color: #d4d4d4;
+  font-family: 'Skranji', cursive;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.loading-message.visible {
+  opacity: 1;
+}
+
+/* Update loading spinner for the overlay */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(212, 160, 23, 0.2);
+  border-top: 4px solid #d4a017;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
