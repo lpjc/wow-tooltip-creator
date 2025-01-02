@@ -4,7 +4,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-module.exports = async function openaiQueryHandler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -61,4 +61,4 @@ module.exports = async function openaiQueryHandler(req, res) {
     console.error('Full OpenAI Error:', error);
     res.status(500).json({ error: 'Error generating color query' });
   }
-};
+}

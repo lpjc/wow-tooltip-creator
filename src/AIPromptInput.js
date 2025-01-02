@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaHatWizard } from "react-icons/fa6";
 import './AIPromptInput.css';
+import { API_BASE_URL } from './config';
 
 function AIPromptInput({ onPromptSubmit }) {
   const [isInputVisible, setIsInputVisible] = useState(false);
@@ -37,14 +38,8 @@ function AIPromptInput({ onPromptSubmit }) {
   
       console.log('Messages for AI1:', messages);
   
-      // Determine the base URL based on environment
-      const baseUrl = process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000'
-        : '';
-      console.log('Base URL:', baseUrl);
-  
       // Fetch tooltip data
-      const tooltipResponse = await fetch(`${baseUrl}/api/openai-tooltip`, {
+      const tooltipResponse = await fetch(`${API_BASE_URL}/openai-tooltip`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages }),
@@ -70,7 +65,7 @@ function AIPromptInput({ onPromptSubmit }) {
   
       // Step 2: Generate Query via AI2
       console.log('Sending Tooltip Data to AI2 for Query Generation...');
-      const queryResponse = await fetch(`${baseUrl}/api/openai-query`, {
+      const queryResponse = await fetch(`${API_BASE_URL}/openai-query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -100,7 +95,7 @@ function AIPromptInput({ onPromptSubmit }) {
   
       // Step 3: Fetch Matching Icons from Supabase
       console.log('Fetching Icons with colors:', queryData.colors);
-      const iconResponse = await fetch(`${baseUrl}/api/find-icon`, {
+      const iconResponse = await fetch(`${API_BASE_URL}/find-icon`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
