@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './IconSelector.css';
+import { ICONS_API_URL } from './config';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 const ICONS_PER_PAGE = 50;
 
 function IconSelector({ onSelect, onClose }) {
@@ -30,7 +30,7 @@ function IconSelector({ onSelect, onClose }) {
         setError(null);
 
         const response = await fetch(
-          `${API_BASE_URL}/api/icons?page=${currentPage}&limit=${ICONS_PER_PAGE}`,
+          `${ICONS_API_URL}/api/icons?page=${currentPage}&limit=${ICONS_PER_PAGE}`,
           {
             signal: controller.signal,
           }
@@ -80,7 +80,7 @@ function IconSelector({ onSelect, onClose }) {
           img.onerror = () => {
             console.error(`Failed to load icon: ${iconName}`);
           };
-          img.src = `/icons/${iconName}`;
+          img.src = `${ICONS_API_URL}/icons/${iconName}`;
         }
       });
     };
@@ -120,7 +120,7 @@ function IconSelector({ onSelect, onClose }) {
           </div>
         ) : (
           <img
-            src={`/icons/${iconName}`}
+            src={`${ICONS_API_URL}/icons/${iconName}`}
             alt={iconName}
             className="actual-image visible"
           />
