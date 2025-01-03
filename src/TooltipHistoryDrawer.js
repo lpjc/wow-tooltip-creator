@@ -55,12 +55,14 @@ function TooltipHistoryDrawer({ savedTooltips, onEditTooltip, onShareTooltip, is
               >
                 <FaDownload /> Download
               </button>
+              {/* Commenting out share button for now
               <button
                 className="button share-button"
                 onClick={() => onShareTooltip(tooltipData)}
               >
                 <FaShareAlt /> Share
               </button>
+              */}
             </div>
           </div>
         ))}
