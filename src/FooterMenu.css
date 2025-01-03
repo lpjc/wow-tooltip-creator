@@ -16,6 +16,7 @@
   font-size: 12px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.5px;
+  text-align: center;
 }
 
 .footer-text .highlight {
@@ -26,4 +27,31 @@
 .footer-text .version {
   color: #7474747e;
   margin-left: 8px;
+}
+
+@media (max-width: 768px) {
+  .footer-menu {
+    height: auto;
+    padding: 12px 20px;
+  }
+
+  .footer-text {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .footer-text .main-text {
+    display: inline-block;
+  }
+
+  .footer-text .separator,
+  .footer-text br {
+    display: none;
+  }
+
+  .footer-text .version {
+    margin-left: 0;
+  }
 }

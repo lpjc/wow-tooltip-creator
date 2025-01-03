@@ -6,10 +6,12 @@ function FooterMenu() {
   return (
     <div className="footer-menu">
       <div className="footer-text">
-        World of Warcraft Tooltip Maker by <a href="https://www.linkedin.com/in/larsudraabstegn/" target="_blank" rel="noopener noreferrer">
-          Lars!
-        </a> © 2025
-        <span className="version">v2.0.1</span>
+        <span className="main-text">
+          World of Warcraft Tooltip Maker by <span className="highlight"><a href="https://www.linkedin.com/in/larsudraabstegn/" target="_blank" rel="noopener noreferrer">Lars!</a></span> · © 2025 · v1.0.0 · 
+        </span>
+        <span className="coffee-text">
+          <a href="https://buymeacoffee.com/larsdesign" target="_blank" rel="noopener noreferrer">Buy me a Coffee</a>
+        </span>
       </div>
     </div>
   );
